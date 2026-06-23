@@ -441,7 +441,7 @@ function showCategories(){
   const lvl = getLevel();
   const hCount = getCompletedHeritageCount();
   document.getElementById("levelDisplay").textContent = "Lv."+lvl+" "+getLevelName();
-  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/12건";
+  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/"+GAME_DATA.length+"건";
 
   const tl = document.getElementById("timelineList");
   tl.innerHTML = "";
