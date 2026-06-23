@@ -35,9 +35,10 @@ input:focus{border-color:var(--accent);}
 .top-bar .level{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--accent2);}
 .top-bar .count{font-size:14px;}
 .back-btn{font-size:14px;padding:6px 12px;background:var(--light);}
+.top-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 
 /* CATEGORIES */
-#categories .greeting{font-size:16px;margin-bottom:16px;padding:12px;border:3px solid var(--accent);background:#FFFDE7;}
+.greeting{font-size:16px;margin-bottom:16px;padding:12px;border:3px solid var(--accent);background:#FFFDE7;}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
 @media(max-width:420px){.cat-grid{grid-template-columns:1fr;}}
 .cat-btn{text-align:left;padding:14px;font-size:14px;line-height:1.5;position:relative;}
@@ -177,11 +178,11 @@ input:focus{border-color:var(--accent);}
 <!-- CATEGORIES SCREEN -->
 <div id="categories" class="hidden">
   <div class="top-bar">
-    <div>
+    <div class="top-info">
       <div class="level" id="levelDisplay"></div>
       <div class="count" id="countDisplay"></div>
     </div>
-    <button class="back-btn" onclick="logout()">로그아웃</button>
+    <button class="back-btn" onclick="showResult()">종료</button>
   </div>
   <div class="greeting">기록관님, 탐사할 유산을 선택하세요.</div>
   <div class="timeline-v" id="timelineList"></div>
@@ -214,6 +215,20 @@ input:focus{border-color:var(--accent);}
     <div class="desc" id="reportDesc"></div>
   </div>
   <div class="inv-list" id="invList"></div>
+</div>
+
+<!-- RESULT SCREEN (placeholder — 추후 '획득 뱃지 설명' 기획) -->
+<div id="result" class="hidden">
+  <div class="top-bar">
+    <div class="level">RESULT</div>
+  </div>
+  <div class="greeting" style="text-align:center;">
+    탐사를 종료했습니다.<br>
+    <span style="font-size:13px;color:#777;">※ 결과화면(획득 뱃지 설명)은 준비 중입니다.</span>
+  </div>
+  <div style="text-align:center;margin-top:24px;">
+    <button onclick="logout()">처음으로</button>
+  </div>
 </div>
 
 </div>
@@ -408,7 +423,7 @@ function typewriterEffect(el, text, speed){
 
 // === SCREENS ===
 function hideAll(){
-  ["login","categories","heritageList","report"].forEach(id=>{
+  ["login","categories","heritageList","report","result"].forEach(id=>{
     document.getElementById(id).classList.add("hidden");
   });
 }
@@ -433,6 +448,12 @@ function logout(){
   document.getElementById("login").classList.remove("hidden");
   document.getElementById("codeInput").value = "";
   document.getElementById("loginError").textContent = "";
+}
+
+// 종료 → 결과화면(현재 placeholder, 추후 '획득 뱃지 설명' 기획). 진행상황 데이터는 보존.
+function showResult(){
+  hideAll();
+  document.getElementById("result").classList.remove("hidden");
 }
 
 function showCategories(){
