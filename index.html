@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Save the Record - 초등용</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#FFFFFF;--accent:#FFD700;--accent2:#FFC107;--text:#222222;--red:#E53935;--green:#43A047;--gray:#BDBDBD;--light:#F5F5F5;--border:#222222;}
+body{font-family:'DotGothic16',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.pixel-font{font-family:'Press Start 2P',monospace;}
+.container{max-width:640px;margin:0 auto;padding:16px;min-height:100vh;}
+button{font-family:'DotGothic16',monospace;cursor:pointer;border:3px solid var(--border);background:var(--bg);color:var(--text);padding:10px 16px;font-size:15px;transition:background 0.1s;}
+button:hover{background:var(--accent);}
+button:active{transform:translate(2px,2px);}
+input{font-family:'DotGothic16',monospace;border:3px solid var(--border);padding:8px 12px;font-size:16px;outline:none;background:var(--bg);}
+input:focus{border-color:var(--accent);}
+.hidden{display:none!important;}
+
+/* LOGIN */
+#login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;gap:20px;}
+#login h1{font-family:'Press Start 2P',monospace;font-size:clamp(18px,5vw,32px);letter-spacing:2px;line-height:1.6;}
+#login .subtitle{font-size:18px;color:#555;margin-bottom:16px;overflow:hidden;white-space:nowrap;width:100%;max-width:400px;}
+#login .subtitle .marquee{display:inline-block;animation:marquee 6s linear infinite;}
+@keyframes marquee{0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
+#login input{width:240px;text-align:center;font-size:18px;}
+#login .error{color:var(--red);font-size:14px;min-height:20px;}
+#login button{font-size:16px;padding:12px 32px;background:var(--accent);font-weight:bold;}
+.cursor-blink::after{content:'_';animation:blink 0.7s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* TOP BAR */
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:3px solid var(--border);margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.top-bar .level{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--accent2);}
+.top-bar .count{font-size:14px;}
+.back-btn{font-size:14px;padding:6px 12px;background:var(--light);}
+
+/* CATEGORIES */
+#categories .greeting{font-size:16px;margin-bottom:16px;padding:12px;border:3px solid var(--accent);background:#FFFDE7;}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+@media(max-width:420px){.cat-grid{grid-template-columns:1fr;}}
+.cat-btn{text-align:left;padding:14px;font-size:14px;line-height:1.5;position:relative;}
+.cat-btn .cat-count{font-size:12px;color:#777;margin-top:4px;}
+.cat-btn.completed{border-color:var(--green);background:#E8F5E9;}
+.cat-btn.completed::after{content:'\2605';position:absolute;top:6px;right:8px;color:var(--accent);font-size:16px;}
+
+/* BADGES */
+.badges-section{margin-top:16px;padding:12px;border:3px solid var(--border);}
+.badges-section h3{font-family:'Press Start 2P',monospace;font-size:10px;margin-bottom:10px;}
+.badge-list{display:flex;flex-wrap:wrap;gap:6px;}
+.badge-item{font-size:12px;padding:4px 8px;border:2px solid var(--gray);color:var(--gray);}
+.badge-item.earned{border-color:var(--accent);color:var(--text);background:#FFFDE7;}
+
+/* HERITAGE LIST */
+.heritage-list{display:flex;flex-direction:column;gap:8px;}
+.heritage-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border:3px solid var(--border);font-size:14px;}
+.heritage-item:hover{background:var(--accent);cursor:pointer;}
+.heritage-item .check{color:var(--green);font-size:18px;min-width:24px;text-align:center;}
+.heritage-item .pending{color:var(--gray);font-size:18px;min-width:24px;text-align:center;}
+.heritage-item .info{flex:1;}
+.heritage-item .h-name{font-weight:bold;}
+.heritage-item .h-meta{font-size:12px;color:#666;margin-top:2px;}
+
+/* REPORT */
+.report-header{padding:12px;border:3px solid var(--accent);background:#FFFDE7;margin-bottom:16px;position:sticky;top:0;z-index:100;}
+.report-header h2{font-size:18px;margin-bottom:6px;}
+.report-header .meta{font-size:13px;color:#555;}
+.report-header .desc{font-size:13px;color:#444;margin-top:8px;line-height:1.6;}
+.report-header .report-img{width:100%;max-height:200px;object-fit:contain;border:3px solid var(--border);margin-bottom:10px;background:var(--light);}
+.report-progress{font-family:'Press Start 2P',monospace;font-size:10px;text-align:right;margin-bottom:12px;color:var(--accent2);}
+.inv-list{display:flex;flex-direction:column;gap:10px;}
+.inv-item{border:3px solid var(--border);padding:12px;}
+.inv-item.completed{border-color:var(--green);}
+.inv-label{font-size:12px;color:#777;margin-bottom:2px;display:flex;align-items:center;gap:6px;}
+.inv-label .status-icon{font-size:12px;}
+.inv-sublabel{font-weight:bold;font-size:15px;margin-bottom:8px;color:var(--text);}
+.inv-content{font-size:14px;line-height:1.7;margin-top:8px;white-space:pre-wrap;}
+.code-input-area{margin-top:8px;display:flex;gap:8px;align-items:center;}
+.digit-box{width:44px;height:50px;text-align:center;font-size:16px;font-family:'Press Start 2P',monospace;border:3px solid var(--border);}
+.digit-box:focus{border-color:var(--accent);background:#FFFDE7;}
+.code-submit{padding:10px 16px;font-size:14px;background:var(--accent);font-weight:bold;}
+.code-error{color:var(--red);font-size:12px;margin-top:4px;min-height:18px;}
+.locked-msg{color:var(--gray);font-size:13px;margin-top:4px;}
+
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border:3px solid var(--border);font-size:14px;z-index:1000;animation:toastIn 0.3s;max-width:90vw;text-align:center;}
+.toast.success{background:#E8F5E9;border-color:var(--green);}
+.toast.error{background:#FFEBEE;border-color:var(--red);}
+.toast.level-up{background:#FFFDE7;border-color:var(--accent);font-family:'Press Start 2P',monospace;font-size:12px;}
+.toast.badge-earned{background:#FFFDE7;border-color:var(--accent);}
+@keyframes toastIn{from{opacity:0;top:0;}to{opacity:1;top:20px;}}
+
+/* SHAKE */
+@keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+.shake{animation:shake 0.4s;}
+
+/* OVERLAY */
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;}
+.overlay-box{background:var(--bg);border:4px solid var(--accent);padding:32px;text-align:center;max-width:360px;width:90%;}
+.overlay-box h2{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--accent2);margin-bottom:16px;}
+.overlay-box p{font-size:15px;line-height:1.6;margin-bottom:16px;}
+.overlay-box button{font-size:14px;padding:10px 24px;}
+
+/* COMPLETE OVERLAY */
+.complete-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:2500;}
+.complete-box{background:var(--bg);border:4px solid var(--accent);padding:24px;text-align:center;max-width:400px;width:92%;max-height:90vh;overflow-y:auto;}
+.complete-box h2{font-family:'Press Start 2P',monospace;font-size:12px;color:var(--accent2);margin-bottom:16px;line-height:1.6;}
+.complete-img{width:100%;max-height:240px;object-fit:contain;border:3px solid var(--border);margin-bottom:14px;background:var(--light);cursor:zoom-in;}
+.report-header .report-img{cursor:zoom-in;}
+.zoomable{position:relative;}
+.zoom-hint{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;padding:3px 8px;border-radius:12px;pointer-events:none;}
+.img-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3500;cursor:zoom-out;padding:24px;}
+.img-lightbox img{max-width:96vw;max-height:84vh;object-fit:contain;box-shadow:0 4px 30px rgba(0,0,0,0.6);border-radius:4px;}
+.img-lightbox .lb-cap{color:#eee;font-size:13px;margin-top:14px;text-align:center;max-width:90vw;line-height:1.5;}
+.img-lightbox .lb-close{position:absolute;top:18px;right:22px;color:#fff;font-size:30px;line-height:1;background:none;border:none;cursor:pointer;}
+.complete-name{font-size:20px;font-weight:bold;margin-bottom:6px;}
+.complete-meta{font-size:14px;color:#555;margin-bottom:6px;}
+.complete-source{font-size:10px;color:var(--gray);margin-bottom:16px;}
+.complete-box button{font-size:15px;padding:12px 32px;background:var(--accent);font-weight:bold;}
+
+/* STARS */
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3000;}
+.star{position:absolute;font-size:24px;animation:starFall 1s forwards;}
+@keyframes starFall{0%{opacity:1;transform:scale(0) rotate(0deg);}50%{opacity:1;transform:scale(1.2) rotate(180deg);}100%{opacity:0;transform:scale(0.5) rotate(360deg) translateY(60px);}}
+
+/* CELEBRATION */
+.celebration{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3000;}
+.confetti{position:absolute;width:8px;height:8px;animation:confettiFall 1.5s forwards;}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(100vh) rotate(720deg);}}
+
+/* TYPEWRITER */
+@keyframes typeChar{from{opacity:0;}to{opacity:1;}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:var(--light);}
+::-webkit-scrollbar-thumb{background:var(--gray);border:2px solid var(--light);}
+
+/* TIMELINE */
+.timeline-v{position:relative;padding-left:70px;padding-top:6px;padding-bottom:6px;margin-bottom:16px;}
+.timeline-v::before{content:'';position:absolute;left:52px;top:0;bottom:0;width:3px;background:var(--border);}
+.era-divider{position:relative;margin:14px 0 12px -70px;}
+.era-badge{display:inline-block;padding:6px 12px;background:var(--border);color:var(--accent);font-family:'Press Start 2P',monospace;font-size:10px;letter-spacing:1px;}
+.tl-item{position:relative;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.tl-year{position:absolute;left:-70px;width:54px;text-align:center;font-family:'Press Start 2P',monospace;font-size:9px;background:var(--accent);border:3px solid var(--border);padding:6px 2px;line-height:1.3;}
+.tl-dot{position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:16px;height:16px;background:var(--bg);border:3px solid var(--border);border-radius:50%;z-index:1;}
+.tl-dot.done{background:var(--green);}
+.tl-card{flex:1;border:3px solid var(--border);padding:10px 12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background 0.1s;}
+.tl-card:hover{background:var(--accent);}
+.tl-card.done{border-color:var(--green);background:#E8F5E9;}
+.tl-card .info{flex:1;}
+.tl-card .h-name{font-weight:bold;font-size:14px;}
+.tl-card .h-meta{font-size:11px;color:#666;margin-top:3px;}
+.tl-card .h-era{display:inline-block;font-size:10px;padding:2px 6px;border:1px solid #999;margin-right:4px;vertical-align:middle;}
+.tl-card .h-era.era-고려{background:#FFF3E0;border-color:#E65100;color:#E65100;}
+.tl-card .h-era.era-조선{background:#E3F2FD;border-color:#1565C0;color:#1565C0;}
+.tl-card .h-era.era-근현대{background:#F3E5F5;border-color:#6A1B9A;color:#6A1B9A;}
+.tl-card .check{color:var(--green);font-size:18px;min-width:20px;text-align:center;}
+.tl-card .pending{color:var(--gray);font-size:18px;min-width:20px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- LOGIN SCREEN -->
+<div id="login">
+  <h1 class="pixel-font">Save the<br>Record</h1>
+  <div class="subtitle"><span class="marquee">기록을 저장하라. 기록을 구하라.</span></div>
+  <input type="text" id="codeInput" placeholder="학급 코드 입력" maxlength="10" autocomplete="off">
+  <div class="error" id="loginError"></div>
+  <button onclick="tryLogin()">로그인</button>
+</div>
+
+<!-- CATEGORIES SCREEN -->
+<div id="categories" class="hidden">
+  <div class="top-bar">
+    <div>
+      <div class="level" id="levelDisplay"></div>
+      <div class="count" id="countDisplay"></div>
+    </div>
+    <button class="back-btn" onclick="logout()">로그아웃</button>
+  </div>
+  <div class="greeting">기록관님, 탐사할 유산을 선택하세요.</div>
+  <div class="timeline-v" id="timelineList"></div>
+  <div class="badges-section">
+    <h3>획득 뱃지</h3>
+    <div class="badge-list" id="badgeList"></div>
+  </div>
+</div>
+
+<!-- HERITAGE LIST SCREEN -->
+<div id="heritageList" class="hidden">
+  <div class="top-bar">
+    <button class="back-btn" onclick="showCategories()">< 시대 선택</button>
+    <div class="level" id="levelDisplay2"></div>
+  </div>
+  <h2 id="catTitle" style="font-size:16px;margin-bottom:12px;"></h2>
+  <div class="heritage-list" id="hList"></div>
+</div>
+
+<!-- REPORT SCREEN -->
+<div id="report" class="hidden">
+  <div class="top-bar">
+    <button class="back-btn" onclick="showCategories()">< 타임라인</button>
+    <div class="report-progress" id="reportProgress"></div>
+  </div>
+  <div class="report-header">
+    <div class="zoomable"><img class="report-img" id="reportImg" src="" alt="" onclick="openLightbox(this)"><span class="zoom-hint">🔍 탭하면 크게</span></div>
+    <h2 id="reportName"></h2>
+    <div class="meta" id="reportMeta"></div>
+    <div class="desc" id="reportDesc"></div>
+  </div>
+  <div class="inv-list" id="invList"></div>
+</div>
+
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay hidden" id="overlay">
+  <div class="overlay-box">
+    <h2 id="overlayTitle"></h2>
+    <p id="overlayMsg"></p>
+    <button onclick="hideOverlay()">확인</button>
+  </div>
+</div>
+
+<!-- COMPLETE OVERLAY -->
+<div class="complete-overlay hidden" id="completeOverlay">
+  <div class="complete-box">
+    <h2>REPORT COMPLETE!</h2>
+    <div class="zoomable"><img class="complete-img" id="completeImg" src="" alt="" onclick="openLightbox(this)"><span class="zoom-hint">🔍 탭하면 크게</span></div>
+    <div class="complete-name" id="completeName"></div>
+    <div class="complete-meta" id="completeMeta"></div>
+    <div class="complete-source" id="completeSource"></div>
+    <button onclick="closeComplete()">확인</button>
+  </div>
+</div>
+
+<!-- IMAGE LIGHTBOX (클릭 확대) -->
+<div class="img-lightbox hidden" id="imgLightbox" onclick="closeLightbox(event)">
+  <button class="lb-close" onclick="closeLightbox(event)" aria-label="닫기">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lb-cap" id="lightboxCap"></div>
+</div>
+
+<!-- STARS CONTAINER -->
+<div class="stars hidden" id="starsContainer"></div>
+
+<script>
+// === GAME DATA ===
+let GAME_DATA = [];  // content_elem.json 에서 로드
+
+const CATEGORIES = [
+  {key:"고려", label:"고려 시대", badge:"\uD83C\uDFDB\uFE0F 고려 기록 전문가"},
+  {key:"조선", label:"조선 시대", badge:"\uD83D\uDCDC 조선 기록 전문가"},
+  {key:"근현대", label:"근현대", badge:"\uD83D\uDCF7 근현대 기록 전문가"}
+];
+
+const INV_LABELS = [
+  {key:"생산 배경", sub:"이 기록은 왜 만들어졌는가?"},
+  {key:"생산 방법", sub:"누가, 어떻게 만들었는가?"},
+  {key:"생존 이야기", sub:"어떻게 현재까지 남게 되었는가?"},
+  {key:"기록문화적 가치", sub:"왜 이 기록이 중요한가?"},
+  {key:"현재 보존 방법", sub:"지금은 어떻게 보존되고 있는가?"},
+  {key:"접근·열람 방법", sub:"일반인이 이 기록을 보려면?"}
+];
+
+const LEVELS = [
+  {min:0, name:"견습 기록관"},
+  {min:2, name:"기록 조사관"},
+  {min:4, name:"기록 분석관"},
+  {min:7, name:"기록 보존관"},
+  {min:10, name:"수석 기록관"},
+  {min:12, name:"기록 수호자"}
+];
+
+// === STATE ===
+let state = {completed:{}, loggedIn:false};
+let currentCategory = "";
+let currentHeritage = null;
+
+function loadState(){
+  try{
+    const s = localStorage.getItem("save_the_record_elem_state");
+    if(s) state = JSON.parse(s);
+  }catch(e){}
+}
+function saveState(){
+  localStorage.setItem("save_the_record_elem_state", JSON.stringify(state));
+}
+
+function markItemCompleted(no, key){
+  if(!state.completed[no]) state.completed[no] = {};
+  state.completed[no][key] = true;
+  saveState();
+}
+
+function isItemCompleted(no, key){
+  return !!(state.completed[no] && state.completed[no][key]);
+}
+
+function getCompletedItems(no){
+  if(!state.completed[no]) return [];
+  return Object.keys(state.completed[no]);
+}
+
+function isHeritageComplete(no){
+  return getCompletedItems(no).length >= 6;
+}
+
+function getCompletedHeritageCount(){
+  let c = 0;
+  GAME_DATA.forEach(d=>{if(isHeritageComplete(d.no)) c++;});
+  return c;
+}
+
+function getLevel(){
+  const count = getCompletedHeritageCount();
+  let lvl = 1;
+  for(let i = LEVELS.length - 1; i >= 0; i--){
+    if(count >= LEVELS[i].min){lvl = i + 1; break;}
+  }
+  return lvl;
+}
+
+function getLevelName(){
+  return LEVELS[getLevel()-1].name;
+}
+
+function getCatItems(catKey){
+  return GAME_DATA.filter(d => d.category === catKey);
+}
+
+function isCatComplete(catKey){
+  const items = getCatItems(catKey);
+  return items.length > 0 && items.every(d => isHeritageComplete(d.no));
+}
+
+// === UI HELPERS ===
+function showToast(msg, type, dur){
+  const t = document.createElement("div");
+  t.className = "toast " + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), dur || 2500);
+}
+
+function showOverlay(title, msg){
+  document.getElementById("overlayTitle").textContent = title;
+  document.getElementById("overlayMsg").textContent = msg;
+  document.getElementById("overlay").classList.remove("hidden");
+}
+
+function hideOverlay(){
+  document.getElementById("overlay").classList.add("hidden");
+}
+
+function spawnStars(count){
+  const c = document.getElementById("starsContainer");
+  c.classList.remove("hidden");
+  c.innerHTML = "";
+  for(let i = 0; i < count; i++){
+    const s = document.createElement("div");
+    s.className = "star";
+    s.textContent = "\u2605";
+    s.style.left = (Math.random()*90+5)+"%";
+    s.style.top = (Math.random()*60+10)+"%";
+    s.style.color = ["#FFD700","#FFC107","#FF9800","#E53935","#43A047"][Math.floor(Math.random()*5)];
+    s.style.animationDelay = (Math.random()*0.5)+"s";
+    c.appendChild(s);
+  }
+  setTimeout(()=>{c.classList.add("hidden");c.innerHTML="";}, 1500);
+}
+
+function spawnConfetti(){
+  const c = document.createElement("div");
+  c.className = "celebration";
+  document.body.appendChild(c);
+  const colors = ["#FFD700","#E53935","#43A047","#2196F3","#FF9800","#9C27B0"];
+  for(let i = 0; i < 40; i++){
+    const p = document.createElement("div");
+    p.className = "confetti";
+    p.style.left = (Math.random()*100)+"%";
+    p.style.top = "-10px";
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = (Math.random()*0.8)+"s";
+    p.style.animationDuration = (1+Math.random())+"s";
+    c.appendChild(p);
+  }
+  setTimeout(()=>c.remove(), 2500);
+}
+
+function typewriterEffect(el, text, speed){
+  el.textContent = "";
+  let i = 0;
+  const interval = setInterval(()=>{
+    if(i < text.length){
+      el.textContent += text[i];
+      i++;
+    } else {
+      clearInterval(interval);
+    }
+  }, speed || 15);
+}
+
+// === SCREENS ===
+function hideAll(){
+  ["login","categories","heritageList","report"].forEach(id=>{
+    document.getElementById(id).classList.add("hidden");
+  });
+}
+
+function tryLogin(){
+  const code = document.getElementById("codeInput").value.trim();
+  if(code === "기록문화"){
+    state.loggedIn = true;
+    saveState();
+    showCategories();
+  } else {
+    document.getElementById("loginError").textContent = "코드가 올바르지 않습니다.";
+    document.getElementById("codeInput").classList.add("shake");
+    setTimeout(()=>document.getElementById("codeInput").classList.remove("shake"),400);
+  }
+}
+
+function logout(){
+  state.loggedIn = false;
+  saveState();
+  hideAll();
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("codeInput").value = "";
+  document.getElementById("loginError").textContent = "";
+}
+
+function showCategories(){
+  hideAll();
+  document.getElementById("categories").classList.remove("hidden");
+  const lvl = getLevel();
+  const hCount = getCompletedHeritageCount();
+  document.getElementById("levelDisplay").textContent = "Lv."+lvl+" "+getLevelName();
+  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/"+GAME_DATA.length+"건";
+
+  const tl = document.getElementById("timelineList");
+  tl.innerHTML = "";
+  const sorted = GAME_DATA.slice().sort((a,b)=>a.created-b.created);
+  let lastEra = "";
+  sorted.forEach(d=>{
+    if(d.category !== lastEra){
+      const div = document.createElement("div");
+      div.className = "era-divider";
+      div.innerHTML = '<span class="era-badge">'+d.category+'</span>';
+      tl.appendChild(div);
+      lastEra = d.category;
+    }
+    const done = isHeritageComplete(d.no);
+    const row = document.createElement("div");
+    row.className = "tl-item";
+    row.innerHTML =
+      '<span class="tl-year">'+d.era_label+'</span>' +
+      '<span class="tl-dot'+(done?" done":"")+'"></span>' +
+      '<div class="tl-card'+(done?" done":"")+'">' +
+        '<div class="info">' +
+          '<div class="h-name">'+d.name+'</div>' +
+          '<div class="h-meta"><span class="h-era era-'+d.category+'">'+d.category+'</span>UNESCO '+d.year+'년 등재 · '+getCompletedItems(d.no).length+'/6</div>' +
+        '</div>' +
+        '<span class="'+(done?"check":"pending")+'">'+(done?"✓":"○")+'</span>' +
+      '</div>';
+    row.querySelector(".tl-card").onclick = ()=>showReport(d.no);
+    tl.appendChild(row);
+  });
+
+  const bl = document.getElementById("badgeList");
+  bl.innerHTML = "";
+  CATEGORIES.forEach(cat=>{
+    const b = document.createElement("div");
+    b.className = "badge-item"+(isCatComplete(cat.key)?" earned":"");
+    b.textContent = cat.badge;
+    bl.appendChild(b);
+  });
+  // Global badge
+  const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
+  const gb = document.createElement("div");
+  gb.className = "badge-item"+(allDone?" earned":"");
+  gb.textContent = "\uD83C\uDFC6 한국 기록 수호자";
+  bl.appendChild(gb);
+}
+
+function showHeritage(catKey){
+  hideAll();
+  currentCategory = catKey;
+  document.getElementById("heritageList").classList.remove("hidden");
+  document.getElementById("levelDisplay2").textContent = "Lv."+getLevel()+" "+getLevelName();
+  document.getElementById("catTitle").textContent = catKey;
+
+  const list = document.getElementById("hList");
+  list.innerHTML = "";
+  const items = getCatItems(catKey);
+  items.forEach(d=>{
+    const div = document.createElement("div");
+    div.className = "heritage-item";
+    const done = isHeritageComplete(d.no);
+    const doneCount = getCompletedItems(d.no).length;
+    div.innerHTML = '<div class="info"><div class="h-name">'+d.name+'</div><div class="h-meta">'+d.country+' | '+d.year+'년 | '+doneCount+'/6</div></div><div class="'+(done?"check":"pending")+'">'+(done?"\u2713":"\u25CB")+'</div>';
+    div.onclick = ()=>showReport(d.no);
+    list.appendChild(div);
+  });
+}
+
+function showReport(no){
+  hideAll();
+  document.getElementById("report").classList.remove("hidden");
+  currentHeritage = no;
+  const d = GAME_DATA.find(x=>x.no===no);
+  const noStr = String(d.no).padStart(2,"0");
+  document.getElementById("reportImg").src = "images/"+noStr+".jpg";
+  document.getElementById("reportImg").alt = d.name;
+  document.getElementById("reportName").textContent = d.name;
+  document.getElementById("reportMeta").textContent = d.country+" | UNESCO "+d.year+"년 등재";
+  document.getElementById("reportDesc").textContent = d.desc || "";
+
+  renderInvList(d);
+}
+
+function renderInvList(d){
+  const doneCount = getCompletedItems(d.no).length;
+  document.getElementById("reportProgress").textContent = doneCount+"/6 완료";
+
+  const list = document.getElementById("invList");
+  list.innerHTML = "";
+
+  INV_LABELS.forEach(inv=>{
+    const item = d.items[inv.key];
+    if(!item) return;
+    const completed = isItemCompleted(d.no, inv.key);
+    const isWeb = item.method === "웹제공";
+
+    const div = document.createElement("div");
+    div.className = "inv-item"+(completed?" completed":"");
+
+    let html = '<div class="inv-label"><span class="status-icon">'+(completed?"\u2713":(isWeb?"\u25C9":"\u25CB"))+'</span> '+inv.key+'</div>';
+    html += '<div class="inv-sublabel">'+inv.sub+'</div>';
+
+    if(isWeb && !completed){
+      // Auto-complete web items on view
+      markItemCompleted(d.no, inv.key);
+      div.className = "inv-item completed";
+      html = '<div class="inv-label"><span class="status-icon">\u2713</span> '+inv.key+'</div>';
+      html += '<div class="inv-sublabel">'+inv.sub+'</div>';
+    }
+
+    if(isWeb || completed){
+      html += '<div class="inv-content" id="content_'+d.no+'_'+inv.key.replace(/[^a-zA-Z가-힣]/g,"")+'">'+item.content+'</div>';
+    } else {
+      html += '<div class="locked-msg">\uD83D\uDD12 카드 코드를 입력하세요</div>';
+      html += '<div class="code-input-area">';
+      html += '<input class="digit-box" type="tel" maxlength="1" data-no="'+d.no+'" data-key="'+inv.key+'" data-pos="0" oninput="digitInput(this)" onkeydown="digitKeydown(event,this)">';
+      html += '<input class="digit-box" type="tel" maxlength="1" data-no="'+d.no+'" data-key="'+inv.key+'" data-pos="1" oninput="digitInput(this)" onkeydown="digitKeydown(event,this)">';
+      html += '<input class="digit-box" type="tel" maxlength="1" data-no="'+d.no+'" data-key="'+inv.key+'" data-pos="2" oninput="digitInput(this)" onkeydown="digitKeydown(event,this)">';
+      html += '<button class="code-submit" onclick="submitCode('+d.no+',\''+inv.key.replace(/'/g,"\\'")+'\')">확인</button>';
+      html += '</div>';
+      html += '<div class="code-error" id="err_'+d.no+'_'+inv.key.replace(/[^a-zA-Z가-힣]/g,"")+'"></div>';
+    }
+
+    div.innerHTML = html;
+    list.appendChild(div);
+  });
+
+  // Check if just completed all web items
+  checkAutoComplete(d);
+}
+
+function checkAutoComplete(d){
+  const doneCount = getCompletedItems(d.no).length;
+  document.getElementById("reportProgress").textContent = doneCount+"/6 완료";
+  if(doneCount >= 6 && !d._celebrated){
+    d._celebrated = true;
+    setTimeout(()=>{
+      spawnConfetti();
+      showCompleteOverlay(d);
+      checkLevelUp(d);
+      checkBadge(d);
+    }, 300);
+  }
+}
+
+// 이미지별 출처 (1~7: 공식/PD/공공누리 확정 / 8~12: 국가기록원 등 원본 확보 후 갱신 예정)
+// 이미지 클릭 확대(라이트박스)
+function openLightbox(imgEl){
+  if(!imgEl || !imgEl.src) return;
+  document.getElementById("lightboxImg").src = imgEl.src;
+  document.getElementById("lightboxCap").textContent = imgEl.alt || "";
+  document.getElementById("imgLightbox").classList.remove("hidden");
+}
+function closeLightbox(e){
+  if(e) e.stopPropagation();
+  document.getElementById("imgLightbox").classList.add("hidden");
+}
+document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeLightbox(); });
+
+window.IMAGE_SOURCES = {
+  1: "사진: 해인사 대장경판 ⓒSteve46814, CC BY-SA 3.0 (Wikimedia Commons)",
+  2: "사진: 직지심체요절, 퍼블릭도메인/CC0 (Wikimedia Commons) · 원본 소장 프랑스국립도서관(BnF)",
+  3: "사진: 조선왕조실록(태백산사고본), 국가유산청 · 공공누리 제1유형",
+  4: "사진: 훈민정음 해례본, 퍼블릭도메인 (Wikimedia Commons) · 원본 소장 간송미술문화재단",
+  5: "사진: 난중일기, 국가유산청 · 퍼블릭도메인 (Wikimedia Commons)",
+  6: "사진: 동의보감 ⓒUlrich Lange, CC BY 4.0 (Wikimedia Commons)",
+  7: "사진: 국채보상운동 기록물, CC BY 4.0 (Wikimedia Commons)",
+  8: "사진: 제주4·3 기록물(형무소에서 보내 온 엽서), 국가유산청 유네스코 세계기록유산",
+  9: "사진: 4·19혁명 기록물, 출처: 유네스코한국위원회(UNESCO 세계기록유산 소개)",
+  10: "사진: 산림녹화 기록물 — 영일지구 사방사업, ⓒKorea Society of Forest Policy · UNESCO 세계기록유산",
+  11: "사진: 5·18 민주화운동 기록물, 출처: UNESCO 국제기록유산센터 · ⓒ국가기록원·광주광역시·5·18기념재단",
+  12: "사진: KBS 특별생방송 '이산가족을 찾습니다' 기록물 ⓒ한국방송공사(KBS) · KBS 아카이브",
+  13: "사진: 승정원일기(보물 제303호), 국가유산청 · 공공누리 제1유형",
+  14: "사진: 조선왕조 의궤 — 원행을묘정리의궤(처용무 정재 도설), 규장각한국학연구원 · 퍼블릭도메인"
+};
+
+function showCompleteOverlay(d){
+  const no = String(d.no).padStart(2,"0");
+  document.getElementById("completeImg").src = "images/"+no+".jpg";
+  document.getElementById("completeImg").alt = d.name;
+  document.getElementById("completeName").textContent = d.name;
+  document.getElementById("completeMeta").textContent = d.country+" | UNESCO 세계기록유산 "+d.year+"년 등재";
+  document.getElementById("completeSource").textContent = (window.IMAGE_SOURCES && window.IMAGE_SOURCES[d.no]) || "사진 출처 확인 중";
+  document.getElementById("completeOverlay").classList.remove("hidden");
+}
+
+function closeComplete(){
+  document.getElementById("completeOverlay").classList.add("hidden");
+  // 타임라인에서 바로 보고서로 진입하면 currentCategory가 비어 있으므로,
+  // 빈 카테고리 화면 대신 항상 타임라인(메인)으로 복귀한다.
+  if(currentCategory){ showHeritage(currentCategory); } else { showCategories(); }
+}
+
+function digitInput(el){
+  const v = el.value.replace(/[^0-9]/g,"");
+  el.value = v.slice(0,1);
+  if(v.length > 0){
+    const pos = parseInt(el.dataset.pos);
+    const siblings = el.parentElement.querySelectorAll(".digit-box");
+    if(pos < 2) siblings[pos+1].focus();
+  }
+}
+
+function digitKeydown(e, el){
+  if(e.key === "Backspace" && el.value === ""){
+    const pos = parseInt(el.dataset.pos);
+    if(pos > 0){
+      const siblings = el.parentElement.querySelectorAll(".digit-box");
+      siblings[pos-1].focus();
+    }
+  }
+  if(e.key === "Enter"){
+    submitCode(parseInt(el.dataset.no), el.dataset.key);
+  }
+}
+
+function submitCode(no, key){
+  const d = GAME_DATA.find(x=>x.no===no);
+  const item = d.items[key];
+  const area = document.querySelector('.code-input-area');
+  if(!area) return;
+
+  // Find the right code input area
+  const allAreas = document.querySelectorAll('.code-input-area');
+  let targetArea = null;
+  allAreas.forEach(a=>{
+    const inputs = a.querySelectorAll('.digit-box');
+    if(inputs.length && inputs[0].dataset.no == no && inputs[0].dataset.key === key){
+      targetArea = a;
+    }
+  });
+  if(!targetArea) return;
+
+  const digits = targetArea.querySelectorAll(".digit-box");
+  const code = Array.from(digits).map(d=>d.value).join("");
+
+  const errId = "err_"+no+"_"+key.replace(/[^a-zA-Z가-힣]/g,"");
+  const errEl = document.getElementById(errId);
+
+  if(code.length < 3){
+    if(errEl) errEl.textContent = "3자리를 모두 입력하세요.";
+    return;
+  }
+
+  if(code === item.code){
+    markItemCompleted(no, key);
+    if(errEl) errEl.textContent = "";
+    showToast("코드 인증 성공!", "success", 1500);
+    spawnStars(8);
+    renderInvList(d);
+    checkLevelUp(d);
+    checkBadge(d);
+  } else {
+    if(errEl) errEl.textContent = "코드가 틀렸습니다.";
+    targetArea.classList.add("shake");
+    setTimeout(()=>targetArea.classList.remove("shake"),400);
+  }
+}
+
+function checkLevelUp(d){
+  const prevLevel = state._lastLevel || 1;
+  const curLevel = getLevel();
+  if(curLevel > prevLevel){
+    state._lastLevel = curLevel;
+    saveState();
+    setTimeout(()=>{
+      showToast("LEVEL UP! Lv."+curLevel+" "+getLevelName(), "level-up", 3000);
+      spawnStars(15);
+    }, 500);
+  }
+  state._lastLevel = curLevel;
+}
+
+function checkBadge(d){
+  CATEGORIES.forEach(cat=>{
+    if(isCatComplete(cat.key)){
+      const bKey = "badge_"+cat.key;
+      if(!state[bKey]){
+        state[bKey] = true;
+        saveState();
+        setTimeout(()=>{
+          showToast("\u2605 뱃지 획득: "+cat.badge+" \u2605", "badge-earned", 3000);
+          spawnStars(20);
+        }, 800);
+      }
+    }
+  });
+  // Check global
+  const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
+  if(allDone && !state.badge_global){
+    state.badge_global = true;
+    saveState();
+    setTimeout(()=>{
+      showOverlay("\uD83C\uDFC6 한국 기록 수호자", "모든 시대의 기록 유산을 완료했습니다! 당신은 진정한 기록 수호자입니다.");
+      spawnConfetti();
+    }, 1500);
+  }
+}
+
+// === INIT ===
+document.getElementById("codeInput").addEventListener("keydown", e=>{
+  if(e.key==="Enter") tryLogin();
+});
+
+// 콘텐츠를 외부 JSON에서 로드 (수정 시 JSON만 교체하면 반영됨)
+fetch('content.json')
+  .then(r=>{ if(!r.ok) throw new Error('content_elem.json '+r.status); return r.json(); })
+  .then(data=>{
+    GAME_DATA = data;
+    loadState();
+    state._lastLevel = getLevel();
+    if(state.loggedIn){
+      showCategories();
+    } else {
+      document.getElementById("login").classList.remove("hidden");
+    }
+  })
+  .catch(err=>{
+    document.body.innerHTML = '<div style="padding:40px;font-family:monospace">콘텐츠를 불러오지 못했습니다.<br>'+err+'<br><br>※ file:// 이 아니라 로컬/웹 서버에서 열어야 합니다.</div>';
+  });
+</script>
+</body>
+</html>
