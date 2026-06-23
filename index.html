@@ -76,6 +76,8 @@ input:focus{border-color:var(--accent);}
 .inv-label .status-icon{font-size:12px;}
 .inv-sublabel{font-weight:bold;font-size:15px;margin-bottom:8px;color:var(--text);}
 .inv-content{font-size:14px;line-height:1.7;margin-top:8px;white-space:pre-wrap;}
+.inv-connection{margin-top:10px;padding:10px;background:#FFFDE7;border:2px solid var(--accent);font-size:13px;line-height:1.6;}
+.inv-connection .conn-title{font-weight:bold;color:var(--accent2);margin-bottom:4px;font-size:12px;}
 .code-input-area{margin-top:8px;display:flex;gap:8px;align-items:center;}
 .digit-box{width:44px;height:50px;text-align:center;font-size:16px;font-family:'Press Start 2P',monospace;border:3px solid var(--border);}
 .digit-box:focus{border-color:var(--accent);background:#FFFDE7;}
@@ -551,6 +553,9 @@ function renderInvList(d){
 
     if(isWeb || completed){
       html += '<div class="inv-content" id="content_'+d.no+'_'+inv.key.replace(/[^a-zA-Z가-힣]/g,"")+'">'+item.content+'</div>';
+      if(!isWeb && item.connection){
+        html += '<div class="inv-connection"><div class="conn-title">📔 Point</div>'+item.connection+'</div>';
+      }
     } else {
       html += '<div class="locked-msg">\uD83D\uDD12 카드 코드를 입력하세요</div>';
       html += '<div class="code-input-area">';

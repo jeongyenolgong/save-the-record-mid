@@ -45,7 +45,8 @@ def convert(xlsx_path, json_path):
         code = "" if code in (None,"") else str(int(code) if isinstance(code,(int,float)) else code)
         meta[no]["items"][label] = dict(
             method=METHOD.get(co.cell(r, cc["method"]).value, "웹제공"), code=code,
-            content=co.cell(r, cc["content"]).value or "")
+            content=co.cell(r, cc["content"]).value or "",
+            connection=co.cell(r, cc["connection"]).value or "")
     out = []
     for no in sorted(meta):
         m = meta[no]
