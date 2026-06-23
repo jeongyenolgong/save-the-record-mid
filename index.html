@@ -169,7 +169,7 @@ input:focus{border-color:var(--accent);}
 <div id="login">
   <h1 class="pixel-font">Save the<br>Record</h1>
   <div class="subtitle"><span class="marquee">기록을 저장하라. 기록을 구하라.</span></div>
-  <input type="text" id="codeInput" placeholder="학급 코드 입력" maxlength="10" autocomplete="off">
+  <input type="text" id="codeInput" placeholder="코드 입력" maxlength="10" autocomplete="off">
   <div class="error" id="loginError"></div>
   <button onclick="tryLogin()">로그인</button>
 </div>
@@ -415,7 +415,7 @@ function hideAll(){
 
 function tryLogin(){
   const code = document.getElementById("codeInput").value.trim();
-  if(code === "기록문화"){
+  if(code === "하이러닝"){
     state.loggedIn = true;
     saveState();
     showCategories();
