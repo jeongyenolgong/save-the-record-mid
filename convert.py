@@ -57,5 +57,41 @@ def convert(xlsx_path, json_path):
     filled = sum(1 for m in out for s in m["items"].values() if s["content"])
     print(f"{os.path.basename(json_path)} 생성: 유산 {len(out)}건, 본문 {filled}개")
 
+def rows(ws):
+    """헤더(1행) 기준으로 각 행을 dict로. 빈 행은 건너뜀."""
+    keys = [ws.cell(1, c).value for c in range(1, ws.max_column+1)]
+    out = []
+    for r in range(2, ws.max_row+1):
+        vals = [ws.cell(r, c).value for c in range(1, ws.max_column+1)]
+        if all(v in (None, "") for v in vals): continue
+        out.append({k: v for k, v in zip(keys, vals) if k})
+    return out
+
+def convert_config(xlsx_path, json_path):
+    """levels/badges/sections 시트 → config.json (레벨·뱃지·항목 설정)."""
+    wb = openpyxl.load_workbook(xlsx_path, data_only=True)
+    levels, badges, sections = [], [], []
+    if "levels" in wb.sheetnames:
+        for x in rows(wb["levels"]):
+            levels.append(dict(level=int(x["level"]), min=int(x["min"]), name=str(x["name"]).strip(),
+                               icon=str(x.get("icon") or "").strip()))
+        levels.sort(key=lambda v: v["min"])
+    if "badges" in wb.sheetnames:
+        for x in rows(wb["badges"]):
+            badges.append(dict(type=str(x["type"]).strip(), key=str(x["key"]).strip(),
+                               emoji=str(x.get("emoji") or "").strip(), name=str(x["name"]).strip(),
+                               desc=str(x.get("desc") or "").strip()))
+    if "sections" in wb.sheetnames:
+        for x in rows(wb["sections"]):
+            sections.append(dict(order=int(x["order"]), key=str(x["key"]).strip(),
+                                 sub=str(x.get("sub") or "").strip()))
+        sections.sort(key=lambda v: v["order"])
+    config = dict(levels=levels, badges=badges, sections=sections)
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(config, f, ensure_ascii=False, indent=1)
+    print(f"{os.path.basename(json_path)} 생성: 레벨 {len(levels)}단계, 뱃지 {len(badges)}종, 항목 {len(sections)}개")
+
 if __name__ == "__main__":
-    convert(find_xlsx(), os.path.join(HERE, "content.json"))
+    xlsx = find_xlsx()
+    convert(xlsx, os.path.join(HERE, "content.json"))
+    convert_config(xlsx, os.path.join(HERE, "config.json"))

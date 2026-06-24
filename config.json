@@ -1,0 +1,102 @@
+{
+ "levels": [
+  {
+   "level": 1,
+   "min": 0,
+   "name": "기록 루키",
+   "icon": "level1.png"
+  },
+  {
+   "level": 2,
+   "min": 3,
+   "name": "기록 헌터",
+   "icon": "level2.png"
+  },
+  {
+   "level": 3,
+   "min": 6,
+   "name": "기록 레인저",
+   "icon": "level3.png"
+  },
+  {
+   "level": 4,
+   "min": 9,
+   "name": "기록 가디언",
+   "icon": "level4.png"
+  },
+  {
+   "level": 5,
+   "min": 12,
+   "name": "기록 마스터",
+   "icon": "level5.png"
+  },
+  {
+   "level": 6,
+   "min": 14,
+   "name": "기록 레전드",
+   "icon": "level6.png"
+  }
+ ],
+ "badges": [
+  {
+   "type": "category",
+   "key": "고려",
+   "emoji": "🏛️",
+   "name": "고려 기록 전문가",
+   "desc": "고려 시대의 모든 기록 유산을 완료했습니다."
+  },
+  {
+   "type": "category",
+   "key": "조선",
+   "emoji": "📜",
+   "name": "조선 기록 전문가",
+   "desc": "조선 시대의 모든 기록 유산을 완료했습니다."
+  },
+  {
+   "type": "category",
+   "key": "근현대",
+   "emoji": "📷",
+   "name": "근현대 기록 전문가",
+   "desc": "근현대의 모든 기록 유산을 완료했습니다."
+  },
+  {
+   "type": "global",
+   "key": "global",
+   "emoji": "🏆",
+   "name": "한국 기록 수호자",
+   "desc": "모든 시대의 기록 유산을 완료했습니다! 당신은 진정한 기록 수호자입니다."
+  }
+ ],
+ "sections": [
+  {
+   "order": 1,
+   "key": "생산 배경",
+   "sub": "이 기록은 왜 만들어졌는가?"
+  },
+  {
+   "order": 2,
+   "key": "생산 방법",
+   "sub": "누가, 어떻게 만들었는가?"
+  },
+  {
+   "order": 3,
+   "key": "생존 이야기",
+   "sub": "어떻게 현재까지 남게 되었는가?"
+  },
+  {
+   "order": 4,
+   "key": "기록문화적 가치",
+   "sub": "왜 이 기록이 중요한가?"
+  },
+  {
+   "order": 5,
+   "key": "현재 보존 방법",
+   "sub": "지금은 어떻게 보존되고 있는가?"
+  },
+  {
+   "order": 6,
+   "key": "접근·열람 방법",
+   "sub": "일반인이 이 기록을 보려면?"
+  }
+ ]
+}

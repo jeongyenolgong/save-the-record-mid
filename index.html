@@ -91,6 +91,9 @@ input:focus{border-color:var(--accent);}
 .toast.success{background:#E8F5E9;border-color:var(--green);}
 .toast.error{background:#FFEBEE;border-color:var(--red);}
 .toast.level-up{background:#FFFDE7;border-color:var(--accent);font-family:'Press Start 2P',monospace;font-size:12px;}
+.toast.level-up .lvup-img{display:block;margin:0 auto 10px;width:76px;height:auto;image-rendering:pixelated;}
+.toast.level-up .lvup-congrats{font-size:13px;color:var(--accent2);margin-bottom:8px;}
+.toast.level-up .lvup-name{font-size:11px;color:var(--text);line-height:1.5;}
 .toast.badge-earned{background:#FFFDE7;border-color:var(--accent);}
 @keyframes toastIn{from{opacity:0;top:0;}to{opacity:1;top:20px;}}
 
@@ -268,29 +271,20 @@ input:focus{border-color:var(--accent);}
 // === GAME DATA ===
 let GAME_DATA = [];  // content_elem.json 에서 로드
 
-const CATEGORIES = [
-  {key:"고려", label:"고려 시대", badge:"\uD83C\uDFDB\uFE0F 고려 기록 전문가"},
-  {key:"조선", label:"조선 시대", badge:"\uD83D\uDCDC 조선 기록 전문가"},
-  {key:"근현대", label:"근현대", badge:"\uD83D\uDCF7 근현대 기록 전문가"}
-];
+// 아래 설정값은 config.json(엑셀 levels/badges/sections 시트)에서 로드 — applyConfig() 참조.
+let CATEGORIES = [];   // 시대별 뱃지 (badges type=category)
+let INV_LABELS = [];   // 6개 조사 항목 (sections)
+let LEVELS = [];       // 레벨 단계 (levels)
+let GLOBAL_BADGE = {emoji:"", name:"", desc:""};  // 전체 완주 뱃지 (badges type=global)
 
-const INV_LABELS = [
-  {key:"생산 배경", sub:"이 기록은 왜 만들어졌는가?"},
-  {key:"생산 방법", sub:"누가, 어떻게 만들었는가?"},
-  {key:"생존 이야기", sub:"어떻게 현재까지 남게 되었는가?"},
-  {key:"기록문화적 가치", sub:"왜 이 기록이 중요한가?"},
-  {key:"현재 보존 방법", sub:"지금은 어떻게 보존되고 있는가?"},
-  {key:"접근·열람 방법", sub:"일반인이 이 기록을 보려면?"}
-];
-
-const LEVELS = [
-  {min:0, name:"견습 기록관"},
-  {min:2, name:"기록 조사관"},
-  {min:4, name:"기록 분석관"},
-  {min:7, name:"기록 보존관"},
-  {min:10, name:"수석 기록관"},
-  {min:12, name:"기록 수호자"}
-];
+function applyConfig(cfg){
+  LEVELS = (cfg.levels||[]).map(l=>({min:l.min, name:l.name, icon:l.icon||""}));
+  INV_LABELS = (cfg.sections||[]).map(s=>({key:s.key, sub:s.sub}));
+  CATEGORIES = (cfg.badges||[]).filter(b=>b.type==="category")
+    .map(b=>({key:b.key, badge:(b.emoji?b.emoji+" ":"")+b.name, name:b.name, desc:b.desc}));
+  const g = (cfg.badges||[]).find(b=>b.type==="global");
+  if(g) GLOBAL_BADGE = {emoji:g.emoji, name:g.name, desc:g.desc};
+}
 
 // === STATE ===
 let state = {completed:{}, loggedIn:false};
@@ -361,6 +355,18 @@ function showToast(msg, type, dur){
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(()=>t.remove(), dur || 2500);
+}
+
+// 레벨업 토스트: 캐릭터 이미지 + "축하합니다!" + Lv.X 이름 (3초 후 사라짐)
+function showLevelUpToast(level, name, icon, dur){
+  const t = document.createElement("div");
+  t.className = "toast level-up";
+  const img = icon ? '<img class="lvup-img" src="images/levels/'+icon+'" alt="">' : '';
+  t.innerHTML = img +
+    '<div class="lvup-congrats">축하합니다!</div>' +
+    '<div class="lvup-name">Lv.'+level+' '+name+'</div>';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), dur || 3000);
 }
 
 function showOverlay(title, msg){
@@ -505,7 +511,7 @@ function showCategories(){
   const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
   const gb = document.createElement("div");
   gb.className = "badge-item"+(allDone?" earned":"");
-  gb.textContent = "\uD83C\uDFC6 한국 기록 수호자";
+  gb.textContent = GLOBAL_BADGE.emoji+" "+GLOBAL_BADGE.name;
   bl.appendChild(gb);
 }
 
@@ -731,7 +737,7 @@ function checkLevelUp(d){
     state._lastLevel = curLevel;
     saveState();
     setTimeout(()=>{
-      showToast("LEVEL UP! Lv."+curLevel+" "+getLevelName(), "level-up", 3000);
+      showLevelUpToast(curLevel, getLevelName(), LEVELS[curLevel-1].icon, 3000);
       spawnStars(15);
     }, 500);
   }
@@ -758,7 +764,7 @@ function checkBadge(d){
     state.badge_global = true;
     saveState();
     setTimeout(()=>{
-      showOverlay("\uD83C\uDFC6 한국 기록 수호자", "모든 시대의 기록 유산을 완료했습니다! 당신은 진정한 기록 수호자입니다.");
+      showOverlay(GLOBAL_BADGE.emoji+" "+GLOBAL_BADGE.name, GLOBAL_BADGE.desc);
       spawnConfetti();
     }, 1500);
   }
@@ -770,9 +776,12 @@ document.getElementById("codeInput").addEventListener("keydown", e=>{
 });
 
 // 콘텐츠를 외부 JSON에서 로드 (수정 시 JSON만 교체하면 반영됨)
-fetch('content.json')
-  .then(r=>{ if(!r.ok) throw new Error('content_elem.json '+r.status); return r.json(); })
-  .then(data=>{
+Promise.all([
+  fetch('config.json').then(r=>{ if(!r.ok) throw new Error('config.json '+r.status); return r.json(); }),
+  fetch('content.json').then(r=>{ if(!r.ok) throw new Error('content.json '+r.status); return r.json(); })
+])
+  .then(([cfg, data])=>{
+    applyConfig(cfg);
     GAME_DATA = data;
     loadState();
     state._lastLevel = getLevel();
