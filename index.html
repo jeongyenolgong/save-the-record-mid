@@ -10,8 +10,8 @@
 :root{--bg:#FFFFFF;--accent:#FFD700;--accent2:#FFC107;--text:#222222;--red:#E53935;--green:#43A047;--gray:#BDBDBD;--light:#F5F5F5;--border:#222222;}
 body{font-family:'DotGothic16',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 .pixel-font{font-family:'Press Start 2P',monospace;}
-.container{max-width:640px;margin:0 auto;padding:16px;min-height:100vh;}
-button{font-family:'DotGothic16',monospace;cursor:pointer;border:3px solid var(--border);background:var(--bg);color:var(--text);padding:10px 16px;font-size:15px;transition:background 0.1s;}
+.container{max-width:660px;margin:0 auto;padding:20px 18px;min-height:100vh;}
+button{font-family:'DotGothic16',monospace;cursor:pointer;border:3px solid var(--border);background:var(--bg);color:var(--text);padding:11px 18px;font-size:16px;transition:background 0.1s;}
 button:hover{background:var(--accent);}
 button:active{transform:translate(2px,2px);}
 input{font-family:'DotGothic16',monospace;border:3px solid var(--border);padding:8px 12px;font-size:16px;outline:none;background:var(--bg);}
@@ -21,24 +21,24 @@ input:focus{border-color:var(--accent);}
 /* LOGIN */
 #login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;gap:20px;}
 #login h1{font-family:'Press Start 2P',monospace;font-size:clamp(18px,5vw,32px);letter-spacing:2px;line-height:1.6;}
-#login .subtitle{font-size:18px;color:#555;margin-bottom:16px;overflow:hidden;white-space:nowrap;width:100%;max-width:400px;}
+#login .subtitle{font-size:20px;color:#555;margin-bottom:16px;overflow:hidden;white-space:nowrap;width:100%;max-width:400px;}
 #login .subtitle .marquee{display:inline-block;animation:marquee 6s linear infinite;}
 @keyframes marquee{0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
-#login input{width:240px;text-align:center;font-size:18px;}
+#login input{width:260px;text-align:center;font-size:20px;}
 #login .error{color:var(--red);font-size:14px;min-height:20px;}
-#login button{font-size:16px;padding:12px 32px;background:var(--accent);font-weight:bold;}
+#login button{font-size:18px;padding:13px 36px;background:var(--accent);font-weight:bold;}
 .cursor-blink::after{content:'_';animation:blink 0.7s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
 /* TOP BAR */
 .top-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:3px solid var(--border);margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-.top-bar .level{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--accent2);}
-.top-bar .count{font-size:14px;}
-.back-btn{font-size:14px;padding:6px 12px;background:var(--light);}
+.top-bar .level{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--accent2);}
+.top-bar .count{font-size:16px;}
+.back-btn{font-size:16px;padding:8px 14px;background:var(--light);}
 .top-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 
 /* CATEGORIES */
-.greeting{font-size:16px;margin-bottom:16px;padding:12px;border:3px solid var(--accent);background:#FFFDE7;}
+.greeting{font-size:18px;margin-bottom:18px;padding:14px;border:3px solid var(--accent);background:#FFFDE7;}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
 @media(max-width:420px){.cat-grid{grid-template-columns:1fr;}}
 .cat-btn{text-align:left;padding:14px;font-size:14px;line-height:1.5;position:relative;}
@@ -55,6 +55,13 @@ input:focus{border-color:var(--accent);}
 .badge-cap{font-size:9px;color:var(--gray);text-align:center;line-height:1.2;}
 .badge-item.earned .badge-cap{color:var(--text);}
 .badge-item.locked .badge-img{filter:grayscale(1) brightness(1.15) opacity(0.45);}
+/* 좌측 플로팅 배지 스트립 (태블릿: 콘텐츠 좌측 여백 / 폰: 하단 가로) */
+.badge-float{position:fixed;top:50%;transform:translateY(-50%);left:max(8px,calc(50% - 330px - 56px));display:flex;flex-direction:column;gap:12px;z-index:500;}
+.bf-item{cursor:pointer;line-height:0;}
+.bf-img{width:48px;height:48px;image-rendering:pixelated;transition:transform .1s;}
+.bf-item:hover .bf-img{transform:scale(1.08);}
+.bf-item.locked .bf-img{filter:grayscale(1) brightness(1.15) opacity(0.5);}
+@media(max-width:767px){.badge-float{top:auto;bottom:8px;left:50%;transform:translateX(-50%);flex-direction:row;gap:10px;}}
 .toast.badge-earned .lvup-img{display:block;margin:0 auto 10px;width:72px;height:auto;image-rendering:pixelated;}
 .toast.badge-earned .lvup-congrats{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--accent2);margin-bottom:8px;}
 .toast.badge-earned .lvup-name{font-size:12px;color:var(--text);line-height:1.5;}
@@ -62,34 +69,34 @@ input:focus{border-color:var(--accent);}
 
 /* HERITAGE LIST */
 .heritage-list{display:flex;flex-direction:column;gap:8px;}
-.heritage-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border:3px solid var(--border);font-size:14px;}
+.heritage-item{display:flex;justify-content:space-between;align-items:center;padding:14px;border:3px solid var(--border);font-size:16px;}
 .heritage-item:hover{background:var(--accent);cursor:pointer;}
 .heritage-item .check{color:var(--green);font-size:18px;min-width:24px;text-align:center;}
 .heritage-item .pending{color:var(--gray);font-size:18px;min-width:24px;text-align:center;}
 .heritage-item .info{flex:1;}
 .heritage-item .h-name{font-weight:bold;}
-.heritage-item .h-meta{font-size:12px;color:#666;margin-top:2px;}
+.heritage-item .h-meta{font-size:13px;color:#666;margin-top:2px;}
 
 /* REPORT */
 .report-header{padding:12px;border:3px solid var(--accent);background:#FFFDE7;margin-bottom:16px;position:sticky;top:0;z-index:100;}
-.report-header h2{font-size:18px;margin-bottom:6px;}
-.report-header .meta{font-size:13px;color:#555;}
-.report-header .desc{font-size:13px;color:#444;margin-top:8px;line-height:1.6;}
-.report-header .report-img{width:100%;max-height:200px;object-fit:contain;border:3px solid var(--border);margin-bottom:10px;background:var(--light);}
-.report-progress{font-family:'Press Start 2P',monospace;font-size:10px;text-align:right;margin-bottom:12px;color:var(--accent2);}
+.report-header h2{font-size:20px;margin-bottom:6px;}
+.report-header .meta{font-size:14px;color:#555;}
+.report-header .desc{font-size:14px;color:#444;margin-top:8px;line-height:1.6;}
+.report-header .report-img{width:100%;max-height:240px;object-fit:contain;border:3px solid var(--border);margin-bottom:10px;background:var(--light);}
+.report-progress{font-family:'Press Start 2P',monospace;font-size:11px;text-align:right;margin-bottom:12px;color:var(--accent2);}
 .inv-list{display:flex;flex-direction:column;gap:10px;}
-.inv-item{border:3px solid var(--border);padding:12px;}
+.inv-item{border:3px solid var(--border);padding:14px;}
 .inv-item.completed{border-color:var(--green);}
-.inv-label{font-size:12px;color:#777;margin-bottom:2px;display:flex;align-items:center;gap:6px;}
+.inv-label{font-size:13px;color:#777;margin-bottom:2px;display:flex;align-items:center;gap:6px;}
 .inv-label .status-icon{font-size:12px;}
-.inv-sublabel{font-weight:bold;font-size:15px;margin-bottom:8px;color:var(--text);}
-.inv-content{font-size:14px;line-height:1.7;margin-top:8px;white-space:pre-wrap;}
-.inv-connection{margin-top:10px;padding:10px;background:#FFFDE7;border:2px solid var(--accent);font-size:13px;line-height:1.6;}
+.inv-sublabel{font-weight:bold;font-size:17px;margin-bottom:8px;color:var(--text);}
+.inv-content{font-size:16px;line-height:1.7;margin-top:8px;white-space:pre-wrap;}
+.inv-connection{margin-top:10px;padding:12px;background:#FFFDE7;border:2px solid var(--accent);font-size:14px;line-height:1.6;}
 .inv-connection .conn-title{font-weight:bold;color:var(--accent2);margin-bottom:4px;font-size:12px;}
 .code-input-area{margin-top:8px;display:flex;gap:8px;align-items:center;}
-.digit-box{width:44px;height:50px;text-align:center;font-size:16px;font-family:'Press Start 2P',monospace;border:3px solid var(--border);}
+.digit-box{width:48px;height:54px;text-align:center;font-size:18px;font-family:'Press Start 2P',monospace;border:3px solid var(--border);}
 .digit-box:focus{border-color:var(--accent);background:#FFFDE7;}
-.code-submit{padding:10px 16px;font-size:14px;background:var(--accent);font-weight:bold;}
+.code-submit{padding:11px 18px;font-size:16px;background:var(--accent);font-weight:bold;}
 .code-error{color:var(--red);font-size:12px;margin-top:4px;min-height:18px;}
 .locked-msg{color:var(--gray);font-size:13px;margin-top:4px;}
 
@@ -154,22 +161,22 @@ input:focus{border-color:var(--accent);}
 .timeline-v{position:relative;padding-left:70px;padding-top:6px;padding-bottom:6px;margin-bottom:16px;}
 .timeline-v::before{content:'';position:absolute;left:52px;top:0;bottom:0;width:3px;background:var(--border);}
 .era-divider{position:relative;margin:14px 0 12px -70px;}
-.era-badge{display:inline-block;padding:6px 12px;background:var(--border);color:var(--accent);font-family:'Press Start 2P',monospace;font-size:10px;letter-spacing:1px;}
+.era-badge{display:inline-block;padding:7px 14px;background:var(--border);color:var(--accent);font-family:'Press Start 2P',monospace;font-size:12px;letter-spacing:1px;}
 .tl-item{position:relative;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
 .tl-year{position:absolute;left:-70px;width:54px;text-align:center;font-family:'Press Start 2P',monospace;font-size:9px;background:var(--accent);border:3px solid var(--border);padding:6px 2px;line-height:1.3;}
 .tl-dot{position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:16px;height:16px;background:var(--bg);border:3px solid var(--border);border-radius:50%;z-index:1;}
 .tl-dot.done{background:var(--green);}
-.tl-card{flex:1;border:3px solid var(--border);padding:10px 12px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background 0.1s;}
+.tl-card{flex:1;border:3px solid var(--border);padding:13px 15px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background 0.1s;}
 .tl-card:hover{background:var(--accent);}
 .tl-card.done{border-color:var(--green);background:#E8F5E9;}
 .tl-card .info{flex:1;}
-.tl-card .h-name{font-weight:bold;font-size:14px;}
-.tl-card .h-meta{font-size:11px;color:#666;margin-top:3px;}
-.tl-card .h-era{display:inline-block;font-size:10px;padding:2px 6px;border:1px solid #999;margin-right:4px;vertical-align:middle;}
+.tl-card .h-name{font-weight:bold;font-size:16px;}
+.tl-card .h-meta{font-size:12px;color:#666;margin-top:3px;}
+.tl-card .h-era{display:inline-block;font-size:11px;padding:3px 7px;border:1px solid #999;margin-right:4px;vertical-align:middle;}
 .tl-card .h-era.era-고려{background:#FFF3E0;border-color:#E65100;color:#E65100;}
 .tl-card .h-era.era-조선{background:#E3F2FD;border-color:#1565C0;color:#1565C0;}
 .tl-card .h-era.era-근현대{background:#F3E5F5;border-color:#6A1B9A;color:#6A1B9A;}
-.tl-card .check{color:var(--green);font-size:18px;min-width:20px;text-align:center;}
+.tl-card .check{color:var(--green);font-size:20px;min-width:22px;text-align:center;}
 .tl-card .pending{color:var(--gray);font-size:18px;min-width:20px;text-align:center;}
 </style>
 </head>
@@ -196,10 +203,7 @@ input:focus{border-color:var(--accent);}
   </div>
   <div class="greeting">기록관님, 탐사할 유산을 선택하세요.</div>
   <div class="timeline-v" id="timelineList"></div>
-  <div class="badges-section">
-    <h3>획득 뱃지</h3>
-    <div class="badge-list" id="badgeList"></div>
-  </div>
+  <div class="badge-float" id="badgeFloat"></div>
 </div>
 
 <!-- HERITAGE LIST SCREEN -->
@@ -208,7 +212,7 @@ input:focus{border-color:var(--accent);}
     <button class="back-btn" onclick="showCategories()">< 시대 선택</button>
     <div class="level" id="levelDisplay2"></div>
   </div>
-  <h2 id="catTitle" style="font-size:16px;margin-bottom:12px;"></h2>
+  <h2 id="catTitle" style="font-size:18px;margin-bottom:14px;"></h2>
   <div class="heritage-list" id="hList"></div>
 </div>
 
@@ -276,7 +280,7 @@ input:focus{border-color:var(--accent);}
 
 <script>
 // === GAME DATA ===
-let GAME_DATA = [];  // content_elem.json 에서 로드
+let GAME_DATA = [];  // content.json 에서 로드
 
 // 아래 설정값은 config.json(엑셀 levels/badges/sections 시트)에서 로드 — applyConfig() 참조.
 let CATEGORIES = [];   // 시대별 뱃지 (badges type=category)
@@ -504,7 +508,7 @@ function showCategories(){
   const lvl = getLevel();
   const hCount = getCompletedHeritageCount();
   document.getElementById("levelDisplay").textContent = "Lv."+lvl+" "+getLevelName();
-  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/"+GAME_DATA.length+"건";
+  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/12건";
 
   const tl = document.getElementById("timelineList");
   tl.innerHTML = "";
@@ -535,16 +539,19 @@ function showCategories(){
     tl.appendChild(row);
   });
 
-  const bl = document.getElementById("badgeList");
+  const bl = document.getElementById("badgeFloat");
   bl.innerHTML = "";
   const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
-  const list = CATEGORIES.map(cat=>({icon:cat.icon, name:cat.name, earned:isCatComplete(cat.key)}));
-  list.push({icon:GLOBAL_BADGE.icon, name:GLOBAL_BADGE.name, earned:allDone});
+  const list = CATEGORIES.map(cat=>({icon:cat.icon, name:cat.name, desc:cat.desc, earned:isCatComplete(cat.key)}));
+  list.push({icon:GLOBAL_BADGE.icon, name:GLOBAL_BADGE.name, desc:GLOBAL_BADGE.desc, earned:allDone});
   list.forEach(it=>{
     const b = document.createElement("div");
-    b.className = "badge-item"+(it.earned?" earned":" locked");
-    const img = it.icon ? '<img class="badge-img" src="images/badges/'+it.icon+'" alt="">' : '';
-    b.innerHTML = img + '<div class="badge-cap">'+it.name+'</div>';
+    b.className = "bf-item"+(it.earned?" earned":" locked");
+    b.title = it.name;
+    b.innerHTML = it.icon ? '<img class="bf-img" src="images/badges/'+it.icon+'" alt="'+it.name+'">' : '';
+    b.onclick = ()=> it.earned
+      ? showOverlay(it.name, it.desc, it.icon)
+      : showOverlay(it.name, "아직 획득하지 못한 배지예요.");
     bl.appendChild(b);
   });
 }
@@ -650,20 +657,23 @@ function checkAutoComplete(d){
   }
 }
 
-// 이미지별 출처 (1~7: 공식/PD/공공누리 확정 / 8~12: 국가기록원 등 원본 확보 후 갱신 예정)
-// 이미지 클릭 확대(라이트박스)
+// 이미지 클릭 확대(라이트박스) — 기록물 디테일을 학생이 읽을 수 있게
 function openLightbox(imgEl){
   if(!imgEl || !imgEl.src) return;
   document.getElementById("lightboxImg").src = imgEl.src;
-  document.getElementById("lightboxCap").textContent = imgEl.alt || "";
+  var cap = imgEl.alt || "";
+  document.getElementById("lightboxCap").textContent = cap;
   document.getElementById("imgLightbox").classList.remove("hidden");
 }
 function closeLightbox(e){
   if(e) e.stopPropagation();
   document.getElementById("imgLightbox").classList.add("hidden");
 }
-document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeLightbox(); });
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape") closeLightbox();
+});
 
+// 이미지별 출처 (1~7: 공식/PD/공공누리 확정 / 8~12: 국가기록원 등 원본 확보 후 갱신 예정)
 window.IMAGE_SOURCES = {
   1: "사진: 해인사 대장경판 ⓒSteve46814, CC BY-SA 3.0 (Wikimedia Commons)",
   2: "사진: 직지심체요절, 퍼블릭도메인/CC0 (Wikimedia Commons) · 원본 소장 프랑스국립도서관(BnF)",
@@ -676,9 +686,7 @@ window.IMAGE_SOURCES = {
   9: "사진: 4·19혁명 기록물, 출처: 유네스코한국위원회(UNESCO 세계기록유산 소개)",
   10: "사진: 산림녹화 기록물 — 영일지구 사방사업, ⓒKorea Society of Forest Policy · UNESCO 세계기록유산",
   11: "사진: 5·18 민주화운동 기록물, 출처: UNESCO 국제기록유산센터 · ⓒ국가기록원·광주광역시·5·18기념재단",
-  12: "사진: KBS 특별생방송 '이산가족을 찾습니다' 기록물 ⓒ한국방송공사(KBS) · KBS 아카이브",
-  13: "사진: 승정원일기(보물 제303호), 국가유산청 · 공공누리 제1유형",
-  14: "사진: 조선왕조 의궤 — 원행을묘정리의궤(처용무 정재 도설), 규장각한국학연구원 · 퍼블릭도메인"
+  12: "사진: KBS 특별생방송 '이산가족을 찾습니다' 기록물 ⓒ한국방송공사(KBS) · KBS 아카이브"
 };
 
 function showCompleteOverlay(d){
