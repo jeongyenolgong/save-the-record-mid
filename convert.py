@@ -35,7 +35,7 @@ def convert(xlsx_path, json_path):
             country="한국",
             year=int(gi("year")) if gi("year") not in (None,"") else None,
             difficulty=int(gi("difficulty")) if gi("difficulty") not in (None,"") else None,
-            desc=gi("desc") or "", items={})
+            desc=gi("desc") or "", source=gi("source") or "", items={})
     for r in range(2, co.max_row+1):
         no = co.cell(r, cc["no"]).value
         if no in (None,"") or int(no) not in meta: continue
