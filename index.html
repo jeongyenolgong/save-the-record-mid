@@ -58,7 +58,7 @@ input:focus{border-color:var(--accent);}
 .toast.badge-earned .lvup-img{display:block;margin:0 auto 10px;width:72px;height:auto;image-rendering:pixelated;}
 .toast.badge-earned .lvup-congrats{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--accent2);margin-bottom:8px;}
 .toast.badge-earned .lvup-name{font-size:12px;color:var(--text);line-height:1.5;}
-.overlay-box .overlay-img{display:block;margin:0 auto 14px;width:96px;height:auto;image-rendering:pixelated;}
+.overlay-box .overlay-img{display:block;margin:0 auto 18px;width:96px;height:auto;image-rendering:pixelated;}
 
 /* HERITAGE LIST */
 .heritage-list{display:flex;flex-direction:column;gap:8px;}
@@ -110,9 +110,9 @@ input:focus{border-color:var(--accent);}
 
 /* OVERLAY */
 .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;}
-.overlay-box{background:var(--bg);border:4px solid var(--accent);padding:32px;text-align:center;max-width:360px;width:90%;}
-.overlay-box h2{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--accent2);margin-bottom:16px;}
-.overlay-box p{font-size:15px;line-height:1.6;margin-bottom:16px;}
+.overlay-box{background:var(--bg);border:4px solid var(--accent);padding:36px 30px;text-align:center;max-width:360px;width:90%;}
+.overlay-box h2{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--accent2);margin-bottom:18px;}
+.overlay-box p{font-size:15px;line-height:1.7;margin-bottom:22px;}
 .overlay-box button{font-size:14px;padding:10px 24px;}
 
 /* COMPLETE OVERLAY */
@@ -388,20 +388,31 @@ function showBadgeToast(name, icon, dur){
   setTimeout(()=>t.remove(), dur || 3000);
 }
 
+let overlayQueue = [];
 function showOverlay(title, msg, icon){
+  overlayQueue.push({title:title, msg:msg, icon:icon});      // 여러 배지 동시 획득 시 순차 표시
+  if(document.getElementById("overlay").classList.contains("hidden")) renderOverlay();
+}
+function renderOverlay(){
+  const it = overlayQueue[0];
+  if(!it) return;
   const box = document.querySelector("#overlay .overlay-box");
   let im = box.querySelector(".overlay-img");
-  if(icon){
+  if(it.icon){
     if(!im){ im = document.createElement("img"); im.className = "overlay-img"; box.insertBefore(im, box.firstChild); }
-    im.src = "images/badges/"+icon; im.style.display = "";
+    im.src = "images/badges/"+it.icon; im.style.display = "";
   } else if(im){ im.style.display = "none"; }
-  document.getElementById("overlayTitle").textContent = title;
-  document.getElementById("overlayMsg").textContent = msg;
+  document.getElementById("overlayTitle").textContent = it.title;
+  // 문장별 줄바꿈 (. ! ? 뒤에서 끊기)
+  const safe = (it.msg||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  document.getElementById("overlayMsg").innerHTML = safe.replace(/([.!?])\s+/g, "$1<br>");
   document.getElementById("overlay").classList.remove("hidden");
 }
 
 function hideOverlay(){
   document.getElementById("overlay").classList.add("hidden");
+  overlayQueue.shift();
+  if(overlayQueue.length) setTimeout(renderOverlay, 300);
 }
 
 function spawnStars(count){
@@ -775,7 +786,7 @@ function checkBadge(d){
         state[bKey] = true;
         saveState();
         setTimeout(()=>{
-          showBadgeToast(cat.name, cat.icon, 3000);
+          showOverlay(cat.name, cat.desc, cat.icon);
           spawnStars(20);
         }, 800);
       }
@@ -787,7 +798,7 @@ function checkBadge(d){
     state.badge_global = true;
     saveState();
     setTimeout(()=>{
-      showOverlay(GLOBAL_BADGE.emoji+" "+GLOBAL_BADGE.name, GLOBAL_BADGE.desc, GLOBAL_BADGE.icon);
+      showOverlay(GLOBAL_BADGE.name, GLOBAL_BADGE.desc, GLOBAL_BADGE.icon);
       spawnConfetti();
     }, 1500);
   }
