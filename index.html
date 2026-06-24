@@ -20,7 +20,33 @@ input:focus{border-color:var(--accent);}
 
 /* LOGIN */
 #login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;gap:20px;}
-#login h1{font-family:'Press Start 2P',monospace;font-size:clamp(18px,5vw,32px);letter-spacing:2px;line-height:1.6;}
+#login h1{font-family:'Press Start 2P',monospace;font-size:clamp(18px,5vw,32px);letter-spacing:2px;line-height:1.7;margin:0;}
+/* 족자(행잉 스크롤) 타이틀 박스 — 한지(크림) 바탕 + 도트 디자인 */
+.title-scroll{display:inline-block;position:relative;padding-top:13px;}
+/* 매다는 끈/고리 */
+.title-scroll::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:30px;height:15px;border:3px solid #6d4c41;border-bottom:none;border-radius:16px 16px 0 0;}
+/* 족자 봉 — 도트(픽셀) 음영 */
+.scroll-rod{position:relative;height:18px;width:calc(100% + 36px);margin-left:-18px;border:3px solid #222;z-index:2;
+  background:linear-gradient(#FFE9A8 0 5px,#FFD24A 5px 12px,#E0950C 12px 18px);
+  box-shadow:inset 4px 0 0 #FFE9A8, inset -4px 0 0 #C57E00;}
+/* 봉 양끝 나무 축 */
+.scroll-rod::before,.scroll-rod::after{content:"";position:absolute;top:50%;width:16px;height:30px;border:3px solid #222;transform:translateY(-50%);
+  background:linear-gradient(#8d6e63 0 50%,#5d4037 50% 100%);}
+.scroll-rod::before{left:-17px;}
+.scroll-rod::after{right:-17px;}
+/* 한지 종이 + 도트 그리드 */
+.scroll-body{border:3px solid #222;border-top:none;border-bottom:none;padding:24px 28px;
+  background-color:#FBF1D6;
+  background-image:radial-gradient(#e6d4a0 1.5px,transparent 1.5px);
+  background-size:9px 9px;
+  box-shadow:inset 0 0 0 2px #E7D3A0;}
+/* 2색 이퀄라이저 타이틀 (골드 계열) */
+.neon-title .nc{display:inline-block;animation:neonEq 6s ease-in-out infinite;will-change:transform;}
+.neon-title .sp{display:inline-block;width:.5em;}
+@keyframes neonEq{
+  0%,100%{color:#6B3F00;text-shadow:0 1px 0 #fff7df;transform:translateY(0);}
+  50%{color:#F2A100;text-shadow:0 1px 0 #fff7df,0 0 6px rgba(242,161,0,.4);transform:translateY(-8px);}
+}
 #login .subtitle{font-size:20px;color:#555;margin-bottom:16px;overflow:hidden;white-space:nowrap;width:100%;max-width:400px;}
 #login .subtitle .marquee{display:inline-block;animation:marquee 6s linear infinite;}
 @keyframes marquee{0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
@@ -36,6 +62,7 @@ input:focus{border-color:var(--accent);}
 .top-bar .count{font-size:16px;}
 .back-btn{font-size:16px;padding:8px 14px;background:var(--light);}
 .top-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.player-name{font-weight:bold;font-size:15px;color:var(--accent2);}
 
 /* CATEGORIES */
 .greeting{font-size:18px;margin-bottom:18px;padding:14px;border:3px solid var(--accent);background:#FFFDE7;}
@@ -185,9 +212,16 @@ input:focus{border-color:var(--accent);}
 
 <!-- LOGIN SCREEN -->
 <div id="login">
-  <h1 class="pixel-font">Save the<br>Record</h1>
+  <div class="title-scroll">
+  <div class="scroll-rod top"></div>
+  <div class="scroll-body">
+  <h1 class="pixel-font neon-title"><span class="nc" style="animation-delay:0s">S</span><span class="nc" style="animation-delay:.18s">a</span><span class="nc" style="animation-delay:.36s">v</span><span class="nc" style="animation-delay:.54s">e</span><span class="sp"></span><span class="nc" style="animation-delay:.72s">t</span><span class="nc" style="animation-delay:.90s">h</span><span class="nc" style="animation-delay:1.08s">e</span><br><span class="nc" style="animation-delay:1.26s">R</span><span class="nc" style="animation-delay:1.44s">e</span><span class="nc" style="animation-delay:1.62s">c</span><span class="nc" style="animation-delay:1.80s">o</span><span class="nc" style="animation-delay:1.98s">r</span><span class="nc" style="animation-delay:2.16s">d</span></h1>
+  </div>
+  <div class="scroll-rod bottom"></div>
+  </div>
   <div class="subtitle"><span class="marquee">기록을 저장하라. 기록을 구하라.</span></div>
-  <input type="text" id="codeInput" placeholder="코드 입력" maxlength="10" autocomplete="off">
+  <input type="text" id="nameInput" placeholder="이름 입력" maxlength="5" autocomplete="off">
+  <input type="text" id="codeInput" placeholder="수업 코드 입력" maxlength="10" autocomplete="off">
   <div class="error" id="loginError"></div>
   <button onclick="tryLogin()">로그인</button>
 </div>
@@ -196,6 +230,7 @@ input:focus{border-color:var(--accent);}
 <div id="categories" class="hidden">
   <div class="top-bar">
     <div class="top-info">
+      <div class="player-name" id="playerName"></div>
       <div class="level" id="levelDisplay"></div>
       <div class="count" id="countDisplay"></div>
     </div>
@@ -237,7 +272,7 @@ input:focus{border-color:var(--accent);}
     <div class="level">RESULT</div>
   </div>
   <div class="greeting" style="text-align:center;">
-    탐사를 종료했습니다.<br>
+    <span id="resultName"></span>탐사를 종료했습니다.<br>
     <span style="font-size:13px;color:#777;">※ 결과화면(획득 뱃지 설명)은 준비 중입니다.</span>
   </div>
   <div style="text-align:center;margin-top:24px;">
@@ -474,10 +509,22 @@ function hideAll(){
   });
 }
 
+// 이름: 입력 전체 보관(최대 5자), 헤더에는 앞 3글자만 노출.
+function getPlayerName(){ return state.playerName || ""; }
+function getPlayerNameShort(){ return getPlayerName().slice(0,3); }
+
 function tryLogin(){
+  const name = document.getElementById("nameInput").value.trim();
   const code = document.getElementById("codeInput").value.trim();
+  if(!name){
+    document.getElementById("loginError").textContent = "이름을 입력해주세요.";
+    document.getElementById("nameInput").classList.add("shake");
+    setTimeout(()=>document.getElementById("nameInput").classList.remove("shake"),400);
+    return;
+  }
   if(code === "하이러닝"){
     state.loggedIn = true;
+    state.playerName = name;
     saveState();
     showCategories();
   } else {
@@ -489,9 +536,11 @@ function tryLogin(){
 
 function logout(){
   state.loggedIn = false;
+  state.playerName = "";
   saveState();
   hideAll();
   document.getElementById("login").classList.remove("hidden");
+  document.getElementById("nameInput").value = "";
   document.getElementById("codeInput").value = "";
   document.getElementById("loginError").textContent = "";
 }
@@ -499,6 +548,8 @@ function logout(){
 // 종료 → 결과화면(현재 placeholder, 추후 '획득 뱃지 설명' 기획). 진행상황 데이터는 보존.
 function showResult(){
   hideAll();
+  const nm = getPlayerName();
+  document.getElementById("resultName").textContent = nm ? nm+" 기록관님, " : "";
   document.getElementById("result").classList.remove("hidden");
 }
 
@@ -507,6 +558,8 @@ function showCategories(){
   document.getElementById("categories").classList.remove("hidden");
   const lvl = getLevel();
   const hCount = getCompletedHeritageCount();
+  const short = getPlayerNameShort();
+  document.getElementById("playerName").textContent = short;
   document.getElementById("levelDisplay").textContent = "Lv."+lvl+" "+getLevelName();
   document.getElementById("countDisplay").textContent = "완료: "+hCount+"/12건";
 
@@ -813,6 +866,9 @@ function checkBadge(d){
 }
 
 // === INIT ===
+document.getElementById("nameInput").addEventListener("keydown", e=>{
+  if(e.key==="Enter") document.getElementById("codeInput").focus();
+});
 document.getElementById("codeInput").addEventListener("keydown", e=>{
   if(e.key==="Enter") tryLogin();
 });
