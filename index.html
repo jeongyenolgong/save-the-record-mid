@@ -49,9 +49,16 @@ input:focus{border-color:var(--accent);}
 /* BADGES */
 .badges-section{margin-top:16px;padding:12px;border:3px solid var(--border);}
 .badges-section h3{font-family:'Press Start 2P',monospace;font-size:10px;margin-bottom:10px;}
-.badge-list{display:flex;flex-wrap:wrap;gap:6px;}
-.badge-item{font-size:12px;padding:4px 8px;border:2px solid var(--gray);color:var(--gray);}
-.badge-item.earned{border-color:var(--accent);color:var(--text);background:#FFFDE7;}
+.badge-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:2px;width:64px;}
+.badge-img{width:52px;height:52px;image-rendering:pixelated;}
+.badge-cap{font-size:9px;color:var(--gray);text-align:center;line-height:1.2;}
+.badge-item.earned .badge-cap{color:var(--text);}
+.badge-item.locked .badge-img{filter:grayscale(1) brightness(1.15) opacity(0.45);}
+.toast.badge-earned .lvup-img{display:block;margin:0 auto 10px;width:72px;height:auto;image-rendering:pixelated;}
+.toast.badge-earned .lvup-congrats{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--accent2);margin-bottom:8px;}
+.toast.badge-earned .lvup-name{font-size:12px;color:var(--text);line-height:1.5;}
+.overlay-box .overlay-img{display:block;margin:0 auto 14px;width:96px;height:auto;image-rendering:pixelated;}
 
 /* HERITAGE LIST */
 .heritage-list{display:flex;flex-direction:column;gap:8px;}
@@ -281,9 +288,9 @@ function applyConfig(cfg){
   LEVELS = (cfg.levels||[]).map(l=>({min:l.min, name:l.name, icon:l.icon||""}));
   INV_LABELS = (cfg.sections||[]).map(s=>({key:s.key, sub:s.sub}));
   CATEGORIES = (cfg.badges||[]).filter(b=>b.type==="category")
-    .map(b=>({key:b.key, badge:(b.emoji?b.emoji+" ":"")+b.name, name:b.name, desc:b.desc}));
+    .map(b=>({key:b.key, badge:(b.emoji?b.emoji+" ":"")+b.name, name:b.name, desc:b.desc, icon:b.icon||""}));
   const g = (cfg.badges||[]).find(b=>b.type==="global");
-  if(g) GLOBAL_BADGE = {emoji:g.emoji, name:g.name, desc:g.desc};
+  if(g) GLOBAL_BADGE = {emoji:g.emoji, name:g.name, desc:g.desc, icon:g.icon||""};
 }
 
 // === STATE ===
@@ -369,7 +376,25 @@ function showLevelUpToast(level, name, icon, dur){
   setTimeout(()=>t.remove(), dur || 3000);
 }
 
-function showOverlay(title, msg){
+// 배지 획득 토스트: 배지 이미지 + "뱃지 획득!" + 배지명 (3초 후 사라짐)
+function showBadgeToast(name, icon, dur){
+  const t = document.createElement("div");
+  t.className = "toast badge-earned";
+  const img = icon ? '<img class="lvup-img" src="images/badges/'+icon+'" alt="">' : '';
+  t.innerHTML = img +
+    '<div class="lvup-congrats">뱃지 획득!</div>' +
+    '<div class="lvup-name">'+name+'</div>';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), dur || 3000);
+}
+
+function showOverlay(title, msg, icon){
+  const box = document.querySelector("#overlay .overlay-box");
+  let im = box.querySelector(".overlay-img");
+  if(icon){
+    if(!im){ im = document.createElement("img"); im.className = "overlay-img"; box.insertBefore(im, box.firstChild); }
+    im.src = "images/badges/"+icon; im.style.display = "";
+  } else if(im){ im.style.display = "none"; }
   document.getElementById("overlayTitle").textContent = title;
   document.getElementById("overlayMsg").textContent = msg;
   document.getElementById("overlay").classList.remove("hidden");
@@ -501,18 +526,16 @@ function showCategories(){
 
   const bl = document.getElementById("badgeList");
   bl.innerHTML = "";
-  CATEGORIES.forEach(cat=>{
+  const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
+  const list = CATEGORIES.map(cat=>({icon:cat.icon, name:cat.name, earned:isCatComplete(cat.key)}));
+  list.push({icon:GLOBAL_BADGE.icon, name:GLOBAL_BADGE.name, earned:allDone});
+  list.forEach(it=>{
     const b = document.createElement("div");
-    b.className = "badge-item"+(isCatComplete(cat.key)?" earned":"");
-    b.textContent = cat.badge;
+    b.className = "badge-item"+(it.earned?" earned":" locked");
+    const img = it.icon ? '<img class="badge-img" src="images/badges/'+it.icon+'" alt="">' : '';
+    b.innerHTML = img + '<div class="badge-cap">'+it.name+'</div>';
     bl.appendChild(b);
   });
-  // Global badge
-  const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
-  const gb = document.createElement("div");
-  gb.className = "badge-item"+(allDone?" earned":"");
-  gb.textContent = GLOBAL_BADGE.emoji+" "+GLOBAL_BADGE.name;
-  bl.appendChild(gb);
 }
 
 function showHeritage(catKey){
@@ -752,7 +775,7 @@ function checkBadge(d){
         state[bKey] = true;
         saveState();
         setTimeout(()=>{
-          showToast("\u2605 뱃지 획득: "+cat.badge+" \u2605", "badge-earned", 3000);
+          showBadgeToast(cat.name, cat.icon, 3000);
           spawnStars(20);
         }, 800);
       }
@@ -764,7 +787,7 @@ function checkBadge(d){
     state.badge_global = true;
     saveState();
     setTimeout(()=>{
-      showOverlay(GLOBAL_BADGE.emoji+" "+GLOBAL_BADGE.name, GLOBAL_BADGE.desc);
+      showOverlay(GLOBAL_BADGE.emoji+" "+GLOBAL_BADGE.name, GLOBAL_BADGE.desc, GLOBAL_BADGE.icon);
       spawnConfetti();
     }, 1500);
   }

@@ -80,7 +80,8 @@ def convert_config(xlsx_path, json_path):
         for x in rows(wb["badges"]):
             badges.append(dict(type=str(x["type"]).strip(), key=str(x["key"]).strip(),
                                emoji=str(x.get("emoji") or "").strip(), name=str(x["name"]).strip(),
-                               desc=str(x.get("desc") or "").strip()))
+                               desc=str(x.get("desc") or "").strip(),
+                               icon=str(x.get("icon") or "").strip()))
     if "sections" in wb.sheetnames:
         for x in rows(wb["sections"]):
             sections.append(dict(order=int(x["order"]), key=str(x["key"]).strip(),
