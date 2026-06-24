@@ -4,37 +4,43 @@
    "level": 1,
    "min": 0,
    "name": "기록 루키",
-   "icon": "level1.png"
+   "icon": "level1.png",
+   "icon_b": "level1b.png"
   },
   {
    "level": 2,
    "min": 3,
    "name": "기록 헌터",
-   "icon": "level2.png"
+   "icon": "level2.png",
+   "icon_b": "level2b.png"
   },
   {
    "level": 3,
    "min": 6,
    "name": "기록 레인저",
-   "icon": "level3.png"
+   "icon": "level3.png",
+   "icon_b": "level3b.png"
   },
   {
    "level": 4,
    "min": 9,
    "name": "기록 가디언",
-   "icon": "level4.png"
+   "icon": "level4.png",
+   "icon_b": "level4b.png"
   },
   {
    "level": 5,
    "min": 12,
    "name": "기록 마스터",
-   "icon": "level5.png"
+   "icon": "level5.png",
+   "icon_b": "level5b.png"
   },
   {
    "level": 6,
    "min": 14,
    "name": "기록 레전드",
-   "icon": "level6.png"
+   "icon": "level6.png",
+   "icon_b": "level6b.png"
   }
  ],
  "badges": [

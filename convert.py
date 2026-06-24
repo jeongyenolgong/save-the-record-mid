@@ -74,7 +74,8 @@ def convert_config(xlsx_path, json_path):
     if "levels" in wb.sheetnames:
         for x in rows(wb["levels"]):
             levels.append(dict(level=int(x["level"]), min=int(x["min"]), name=str(x["name"]).strip(),
-                               icon=str(x.get("icon") or "").strip()))
+                               icon=str(x.get("icon") or "").strip(),
+                               icon_b=str(x.get("icon_b") or "").strip()))
         levels.sort(key=lambda v: v["min"])
     if "badges" in wb.sheetnames:
         for x in rows(wb["badges"]):
