@@ -4,17 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Save the Record - 중등용</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'Galmuri11';src:url('fonts/Galmuri11.woff2') format('woff2');font-display:swap;}
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--bg:#FFFFFF;--accent:#FFD700;--accent2:#FFC107;--text:#222222;--red:#E53935;--green:#43A047;--gray:#BDBDBD;--light:#F5F5F5;--border:#222222;}
-body{font-family:'DotGothic16',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Galmuri11',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 .pixel-font{font-family:'Press Start 2P',monospace;}
 .container{max-width:660px;margin:0 auto;padding:20px 18px;min-height:100vh;}
-button{font-family:'DotGothic16',monospace;cursor:pointer;border:3px solid var(--border);background:var(--bg);color:var(--text);padding:11px 18px;font-size:16px;transition:background 0.1s;}
+button{font-family:'Galmuri11',monospace;cursor:pointer;border:3px solid var(--border);background:var(--bg);color:var(--text);padding:11px 18px;font-size:16px;transition:background 0.1s;}
 button:hover{background:var(--accent);}
 button:active{transform:translate(2px,2px);}
-input{font-family:'DotGothic16',monospace;border:3px solid var(--border);padding:8px 12px;font-size:16px;outline:none;background:var(--bg);}
+input{font-family:'Galmuri11',monospace;border:3px solid var(--border);padding:8px 12px;font-size:16px;outline:none;background:var(--bg);}
 input:focus{border-color:var(--accent);}
 .hidden{display:none!important;}
 
@@ -134,7 +135,7 @@ input:focus{border-color:var(--accent);}
 /* OVERLAY */
 .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;}
 .overlay-box{background:var(--bg);border:4px solid var(--accent);padding:30px 30px 26px;text-align:center;width:460px;max-width:90vw;display:flex;flex-direction:column;align-items:center;}
-.overlay-box h2{font-family:'DotGothic16',monospace;font-weight:bold;font-size:22px;color:var(--accent2);margin:0 0 12px;}
+.overlay-box h2{font-family:'Galmuri11',monospace;font-weight:bold;font-size:22px;color:var(--accent2);margin:0 0 12px;}
 .overlay-box p{font-size:15px;line-height:1.7;margin:0 0 22px;min-height:51px;}  /* 2줄 고정 → 배지·레벨 확인버튼 위치 동일 */
 .overlay-box button{font-size:14px;padding:10px 26px;}
 /* 팝업 미디어 슬롯(배지·레벨 공통 높이) */
@@ -149,7 +150,7 @@ input:focus{border-color:var(--accent);}
 /* COMPLETE OVERLAY */
 .complete-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:2500;}
 .complete-box{background:var(--bg);border:4px solid var(--accent);padding:24px;text-align:center;width:460px;max-width:90vw;max-height:90vh;overflow-y:auto;}
-.complete-box h2{font-family:'DotGothic16',monospace;font-weight:bold;font-size:22px;color:var(--accent2);margin-bottom:16px;line-height:1.4;}
+.complete-box h2{font-family:'Galmuri11',monospace;font-weight:bold;font-size:22px;color:var(--accent2);margin-bottom:16px;line-height:1.4;}
 .complete-img{width:100%;max-height:240px;object-fit:contain;border:3px solid var(--border);margin-bottom:14px;background:var(--light);}
 .report-header .report-img{cursor:zoom-in;}
 .zoomable{position:relative;}
@@ -178,24 +179,63 @@ input:focus{border-color:var(--accent);}
 /* TIMELINE */
 .timeline-v{position:relative;padding-left:70px;padding-top:6px;padding-bottom:6px;margin-bottom:16px;}
 .timeline-v::before{content:'';position:absolute;left:52px;top:0;bottom:0;width:3px;background:var(--border);}
-.era-divider{position:relative;margin:14px 0 12px -70px;}
-.era-badge{display:inline-block;padding:7px 14px;background:var(--border);color:var(--accent);font-family:'Press Start 2P',monospace;font-size:12px;letter-spacing:1px;}
+/* 시대 족자 (한지+골드봉, 왼쪽·선 약간 침범, 픽셀 그림자) */
+.era-scroll{position:relative;margin:24px 0 14px -70px;width:66px;z-index:1;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.22));}
+.era-rod{position:relative;height:13px;border:3px solid #222;z-index:2;background:linear-gradient(#FFE9A8 0 4px,#FFD24A 4px 8px,#E0950C 8px 13px);box-shadow:inset 4px 0 0 #FFE9A8, inset -4px 0 0 #C57E00;}
+.era-rod::before,.era-rod::after{content:"";position:absolute;top:50%;width:10px;height:19px;border:3px solid #222;transform:translateY(-50%);background:linear-gradient(#8d6e63 0 50%,#5d4037 50% 100%);}
+.era-rod::before{left:-11px;} .era-rod::after{right:-11px;}
+.era-paper{border:3px solid #222;border-top:none;border-bottom:none;padding:8px 6px;text-align:center;background-color:#FBF1D6;background-image:radial-gradient(#e6d4a0 1.5px,transparent 1.5px);background-size:9px 9px;box-shadow:inset 0 0 0 2px #E7D3A0;}
+.era-name{font-weight:bold;color:#6B3F00;font-size:15px;}
 .tl-item{position:relative;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-.tl-year{position:absolute;left:-70px;width:54px;text-align:center;font-family:'Press Start 2P',monospace;font-size:9px;background:var(--accent);border:3px solid var(--border);padding:6px 2px;line-height:1.3;}
-.tl-dot{position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:16px;height:16px;background:var(--bg);border:3px solid var(--border);border-radius:50%;z-index:1;}
-.tl-dot.done{background:var(--green);}
-.tl-card{flex:1;border:3px solid var(--border);padding:13px 15px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background 0.1s;}
+/* 연도 배지 — 한지 배경 + 픽셀 그림자 */
+.tl-year{position:absolute;left:-70px;width:54px;text-align:center;font-family:'Press Start 2P',monospace;font-size:9px;color:#6B3F00;border:3px solid var(--border);padding:6px 2px;line-height:1.3;background-color:#FBF1D6;background-image:radial-gradient(#e6d4a0 1.5px,transparent 1.5px);background-size:9px 9px;box-shadow:3px 3px 0 rgba(0,0,0,.22), inset 0 0 0 2px #E7D3A0;}
+.tl-prog{flex:0 0 auto;font-size:14px;font-weight:bold;color:#555;white-space:nowrap;}
+/* 완료 도장 — 빨강 단색 完 + 픽셀 그림자 */
+.tl-seal{flex:0 0 auto;width:34px;height:34px;border:3px solid #C0392B;display:flex;align-items:center;justify-content:center;box-shadow:2px 2px 0 rgba(0,0,0,.18);}
+.tl-seal .ch{font-family:'Galmuri11',monospace;font-weight:bold;font-size:21px;line-height:1;color:#C0392B;}
+.tl-card{flex:1;border:4px solid var(--border);box-shadow:4px 4px 0 rgba(0,0,0,.22);padding:13px 15px;background:var(--bg);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background 0.1s;}
 .tl-card:hover{background:var(--accent);}
-.tl-card.done{border-color:var(--green);background:#E8F5E9;}
+.tl-card.done{background-color:#FBF1D6;background-image:radial-gradient(#e6d4a0 1.5px,transparent 1.5px);background-size:9px 9px;box-shadow:4px 4px 0 rgba(0,0,0,.22), inset 0 0 0 2px #E7D3A0;}
+.tl-card.done .h-meta{color:#8a6d3b;}
 .tl-card .info{flex:1;}
 .tl-card .h-name{font-weight:bold;font-size:16px;}
 .tl-card .h-meta{font-size:12px;color:#666;margin-top:3px;}
-.tl-card .h-era{display:inline-block;font-size:11px;padding:3px 7px;border:1px solid #999;margin-right:4px;vertical-align:middle;}
-.tl-card .h-era.era-고려{background:#FFF3E0;border-color:#E65100;color:#E65100;}
-.tl-card .h-era.era-조선{background:#E3F2FD;border-color:#1565C0;color:#1565C0;}
-.tl-card .h-era.era-근현대{background:#F3E5F5;border-color:#6A1B9A;color:#6A1B9A;}
-.tl-card .check{color:var(--green);font-size:20px;min-width:22px;text-align:center;}
-.tl-card .pending{color:var(--gray);font-size:18px;min-width:20px;text-align:center;}
+
+/* TUTORIAL */
+#tutorial{display:flex;flex-direction:column;min-height:100vh;padding:18px 0;}
+.tut-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px;padding:10px 6px;}
+.tut-char{position:relative;width:104px;height:128px;margin:0 auto;}
+.tut-char img{position:absolute;left:0;top:0;width:104px;height:auto;image-rendering:pixelated;}
+.tut-char .b{opacity:0;animation:charSwap .8s steps(1,end) infinite;}
+.tut-title{font-family:'Press Start 2P',monospace;font-size:14px;line-height:1.7;color:var(--accent2);letter-spacing:1px;}
+.tut-title.ko{font-family:'Galmuri11',monospace;font-weight:bold;font-size:21px;color:var(--text);letter-spacing:0;}
+.tut-title .nm{color:var(--text);}
+.tut-title .lv{color:var(--accent2);}
+.tut-body{font-size:16px;line-height:1.8;color:#444;max-width:430px;}
+.tut-body b{color:var(--accent2);}
+.tut-eras{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.tut-era{border:3px solid var(--border);padding:10px 14px;font-size:15px;font-weight:bold;background:var(--light);}
+.tut-secs{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:460px;}
+.tut-sec{border:3px solid var(--border);padding:9px 11px;text-align:left;background:var(--bg);}
+.tut-sec .k{font-weight:bold;font-size:14px;}
+.tut-sec .s{font-size:11px;color:#777;margin-top:2px;}
+.tut-codemock{display:flex;flex-direction:column;align-items:center;gap:9px;border:3px dashed var(--gray);padding:16px 18px;background:var(--light);}
+.tut-lock{font-size:14px;color:#888;}
+.tut-digits{display:flex;gap:8px;align-items:center;}
+.tut-digit{width:42px;height:50px;border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Press Start 2P',monospace;font-size:18px;background:var(--bg);}
+.tut-mockbtn{border:3px solid var(--border);background:var(--accent);font-weight:bold;padding:8px 14px;font-size:14px;font-family:'Galmuri11',monospace;}
+.tut-arrow{font-size:20px;color:var(--accent2);line-height:1;}
+.tut-done-row{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--green);font-weight:bold;}
+.tut-icons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:flex-end;}
+.tut-icons.levels img{width:40px;height:auto;image-rendering:pixelated;}
+.tut-icons.badges img{width:48px;height:auto;image-rendering:pixelated;}
+.tut-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 4px;gap:10px;border-top:3px solid var(--border);}
+.tut-dots{display:flex;gap:7px;justify-content:center;flex:1;}
+.tut-dot{width:9px;height:9px;border:2px solid var(--border);background:var(--bg);border-radius:50%;}
+.tut-dot.on{background:var(--accent);}
+.tut-nav button{font-size:15px;padding:11px 20px;}
+.tut-nav .next{background:var(--accent);font-weight:bold;}
+.tut-nav .prev:disabled{opacity:.3;cursor:default;}
 </style>
 </head>
 <body>
@@ -215,6 +255,16 @@ input:focus{border-color:var(--accent);}
   <input type="text" id="codeInput" placeholder="수업 코드 입력" maxlength="10" autocomplete="off">
   <div class="error" id="loginError"></div>
   <button onclick="tryLogin()">로그인</button>
+</div>
+
+<!-- TUTORIAL SCREEN -->
+<div id="tutorial" class="hidden">
+  <div class="tut-stage" id="tutStage"></div>
+  <div class="tut-nav">
+    <button class="prev" id="tutPrev" onclick="tutorialPrev()">이전</button>
+    <div class="tut-dots" id="tutDots"></div>
+    <button class="next" id="tutNext" onclick="tutorialNext()">다음</button>
+  </div>
 </div>
 
 <!-- CATEGORIES SCREEN -->
@@ -354,6 +404,15 @@ function getCompletedItems(no){
   return Object.keys(state.completed[no]);
 }
 
+// 진행개수(N/6): 웹제공 등 이미 채워진 정보는 채워진 것으로, 카드 항목은 입력 완료분만 카운트
+function getFilledCount(d){
+  let n = 0;
+  for(const k in d.items){
+    if(d.items[k].method !== "카드" || isItemCompleted(d.no, k)) n++;
+  }
+  return n;
+}
+
 function isHeritageComplete(no){
   return getCompletedItems(no).length >= 6;
 }
@@ -446,10 +505,85 @@ function spawnStars(count){
 
 // === SCREENS ===
 function hideAll(){
-  ["login","categories","heritageList","report","result"].forEach(id=>{
+  ["login","tutorial","categories","heritageList","report","result"].forEach(id=>{
     document.getElementById(id).classList.add("hidden");
   });
 }
+
+// === TUTORIAL (로그인 → 타임라인 사이, 매 로그인마다 표시) ===
+let tutStep = 0;
+let TUT_STEPS = [];
+
+function buildTutorialSteps(){
+  const name = getPlayerName() || "기록관";
+  const lv1 = LEVELS[0] || {};
+  const charHtml = '<div class="tut-char"><img class="a" src="images/levels/'+(lv1.icon||"level1.png")+'" alt="">'
+    + (lv1.iconB ? '<img class="b" src="images/levels/'+lv1.iconB+'" alt="">' : '') + '</div>';
+  const eraChips = CATEGORIES.map(c=>'<span class="tut-era">'+c.badge+'</span>').join("");
+  const secGrid = INV_LABELS.map(s=>'<div class="tut-sec"><div class="k">'+s.key+'</div><div class="s">'+s.sub+'</div></div>').join("");
+  const lvlIcons = LEVELS.map(l=>l.icon?'<img src="images/levels/'+l.icon+'" alt="">':'').join("");
+  const badgeIcons = CATEGORIES.map(c=>c.icon?'<img src="images/badges/'+c.icon+'" alt="'+c.name+'">':'').join("")
+    + (GLOBAL_BADGE.icon?'<img src="images/badges/'+GLOBAL_BADGE.icon+'" alt="'+GLOBAL_BADGE.name+'">':'');
+  const lastName = LEVELS.length ? LEVELS[LEVELS.length-1].name : "기록 레전드";
+  const total = GAME_DATA.length;
+  const lastLv = LEVELS.length || 6;
+
+  return [
+    { html: charHtml
+        + '<div class="tut-title ko"><span class="nm">'+name+'</span> <span class="lv">'+(lv1.name||"기록 루키")+'</span>, 반갑습니다!</div>'
+        + '<div class="tut-body">지금부터 흩어진 <b>기록을 구하고 저장</b>하는<br>미션을 수행해야 합니다.</div>' },
+    { html: charHtml
+        + '<div class="tut-title">MISSION</div>'
+        + '<div class="tut-body">사라질 위기에 놓인 <b>기록 유산 '+total+'건</b>을 구해내세요!<br>유산은 세 시대에 흩어져 있어요.</div>'
+        + '<div class="tut-eras">'+eraChips+'</div>' },
+    { html: '<div class="tut-title ko">조사 보고서 6항목</div>'
+        + '<div class="tut-body">유산을 선택하면 <b>6가지 조사 항목</b>이 기다려요.</div>'
+        + '<div class="tut-secs">'+secGrid+'</div>' },
+    { html: '<div class="tut-title ko">단서 코드를 찾아라</div>'
+        + '<div class="tut-body">각 항목은 <b>잠겨 있어요</b>. 출력물(<b>단서 카드</b>)에서 <b>3자리 숫자 코드</b>를 찾아 입력하면 잠금 해제!</div>'
+        + '<div class="tut-codemock">'
+          + '<div class="tut-lock">🔒 카드 코드를 입력하세요</div>'
+          + '<div class="tut-digits"><span class="tut-digit">1</span><span class="tut-digit">4</span><span class="tut-digit">7</span><span class="tut-mockbtn">확인</span></div>'
+          + '<div class="tut-arrow">↓</div>'
+          + '<div class="tut-done-row">✓ 기록 저장 성공!</div>'
+        + '</div>' },
+    { html: '<div class="tut-title ko">기록 완성 &amp; 성장</div>'
+        + '<div class="tut-body">한 유산의 6개 항목을 모두 채우면 <b>기록 완성! ⭐</b><br>모을수록 <b>레벨</b>이 오르고 시대별 <b>뱃지</b>를 얻어요.</div>'
+        + '<div class="tut-icons levels">'+lvlIcons+'</div>'
+        + '<div class="tut-icons badges">'+badgeIcons+'</div>'
+        + '<div class="tut-body" style="font-size:14px;margin-top:2px;">'+total+'건을 모두 구하면 → <b>Lv.'+lastLv+' '+lastName+' + 🏆 '+(GLOBAL_BADGE.name||"올 컴플리트")+'</b></div>' },
+    { html: charHtml
+        + '<div class="tut-title ko">준비 완료!</div>'
+        + '<div class="tut-body">'+name+' 기록관님, 첫 기록을 구하러 갑니다 🚀</div>' }
+  ];
+}
+
+function showTutorial(){
+  hideAll();
+  TUT_STEPS = buildTutorialSteps();
+  tutStep = 0;
+  document.getElementById("tutorial").classList.remove("hidden");
+  renderTutorialStep();
+}
+
+function renderTutorialStep(){
+  const s = TUT_STEPS[tutStep];
+  document.getElementById("tutStage").innerHTML = s.html;
+  document.getElementById("tutDots").innerHTML =
+    TUT_STEPS.map((_,i)=>'<span class="tut-dot'+(i===tutStep?" on":"")+'"></span>').join("");
+  document.getElementById("tutPrev").disabled = (tutStep === 0);
+  document.getElementById("tutNext").textContent =
+    (tutStep === TUT_STEPS.length-1) ? "시작하기 🚀" : "다음";
+}
+
+function tutorialNext(){
+  if(tutStep < TUT_STEPS.length-1){ tutStep++; renderTutorialStep(); }
+  else { startGame(); }
+}
+function tutorialPrev(){
+  if(tutStep > 0){ tutStep--; renderTutorialStep(); }
+}
+function startGame(){ showCategories(); }
 
 // 이름: 입력 전체 보관(최대 5자), 헤더에는 앞 3글자만 노출.
 function getPlayerName(){ return state.playerName || ""; }
@@ -468,7 +602,7 @@ function tryLogin(){
     state.loggedIn = true;
     state.playerName = name;
     saveState();
-    showCategories();
+    showTutorial();
   } else {
     document.getElementById("loginError").textContent = "코드가 올바르지 않습니다.";
     document.getElementById("codeInput").classList.add("shake");
@@ -503,7 +637,7 @@ function showCategories(){
   const short = getPlayerNameShort();
   document.getElementById("playerName").textContent = short;
   document.getElementById("levelDisplay").textContent = "Lv."+lvl+" "+getLevelName();
-  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/12건";
+  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/"+GAME_DATA.length+"건";
 
   const tl = document.getElementById("timelineList");
   tl.innerHTML = "";
@@ -512,8 +646,8 @@ function showCategories(){
   sorted.forEach(d=>{
     if(d.category !== lastEra){
       const div = document.createElement("div");
-      div.className = "era-divider";
-      div.innerHTML = '<span class="era-badge">'+d.category+'</span>';
+      div.className = "era-scroll";
+      div.innerHTML = '<div class="era-rod top"></div><div class="era-paper"><span class="era-name">'+d.category+'</span></div><div class="era-rod bottom"></div>';
       tl.appendChild(div);
       lastEra = d.category;
     }
@@ -522,13 +656,14 @@ function showCategories(){
     row.className = "tl-item";
     row.innerHTML =
       '<span class="tl-year">'+d.era_label+'</span>' +
-      '<span class="tl-dot'+(done?" done":"")+'"></span>' +
       '<div class="tl-card'+(done?" done":"")+'">' +
         '<div class="info">' +
           '<div class="h-name">'+d.name+'</div>' +
-          '<div class="h-meta"><span class="h-era era-'+d.category+'">'+d.category+'</span>UNESCO '+d.year+'년 등재 · '+getCompletedItems(d.no).length+'/6</div>' +
+          '<div class="h-meta">UNESCO '+d.year+'년 등재</div>' +
         '</div>' +
-        '<span class="'+(done?"check":"pending")+'">'+(done?"✓":"○")+'</span>' +
+        (done
+          ? '<span class="tl-seal"><span class="ch">完</span></span>'
+          : '<span class="tl-prog">'+getFilledCount(d)+'/'+INV_LABELS.length+'</span>') +
       '</div>';
     row.querySelector(".tl-card").onclick = ()=>showReport(d.no);
     tl.appendChild(row);
