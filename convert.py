@@ -88,10 +88,16 @@ def convert_config(xlsx_path, json_path):
             sections.append(dict(order=int(x["order"]), key=str(x["key"]).strip(),
                                  sub=str(x.get("sub") or "").strip()))
         sections.sort(key=lambda v: v["order"])
-    config = dict(levels=levels, badges=badges, sections=sections)
+    labels = {}
+    if "labels" in wb.sheetnames:
+        for x in rows(wb["labels"]):
+            k = str(x.get("key") or "").strip()
+            if k:
+                labels[k] = str(x.get("value") or "").strip()
+    config = dict(levels=levels, badges=badges, sections=sections, labels=labels)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(config, f, ensure_ascii=False, indent=1)
-    print(f"{os.path.basename(json_path)} 생성: 레벨 {len(levels)}단계, 뱃지 {len(badges)}종, 항목 {len(sections)}개")
+    print(f"{os.path.basename(json_path)} 생성: 레벨 {len(levels)}단계, 뱃지 {len(badges)}종, 항목 {len(sections)}개, 라벨 {len(labels)}개")
 
 if __name__ == "__main__":
     xlsx = find_xlsx()

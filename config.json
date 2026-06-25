@@ -108,5 +108,10 @@
    "key": "접근·열람 방법",
    "sub": "일반인이 이 기록을 보려면?"
   }
- ]
+ ],
+ "labels": {
+  "connectionTitle": "추가 정보",
+  "codePrompt": "코드를 입력하세요",
+  "codeSubmit": "확인"
+ }
 }

@@ -109,27 +109,33 @@ input:focus{border-color:var(--accent);}
 .heritage-item .h-meta{font-size:13px;color:#666;margin-top:2px;}
 
 /* REPORT */
-.report-header{padding:12px;border:3px solid var(--accent);background:#FFFDE7;margin-bottom:16px;}
-.report-header h2{font-size:20px;margin-bottom:6px;}
-.report-header .meta{font-size:14px;color:#555;}
-.report-header .desc{font-size:14px;color:#444;margin-top:8px;line-height:1.6;}
-.report-header .report-img{width:100%;max-height:240px;object-fit:contain;border:3px solid var(--border);margin-bottom:10px;background:var(--light);}
 .report-era{font-size:15px;font-weight:bold;color:#6B3F00;}
-.inv-list{display:flex;flex-direction:column;gap:10px;}
-.inv-item{border:3px solid var(--border);padding:14px;}
-.inv-item.completed{border-color:var(--green);}
-.inv-label{font-size:13px;color:#777;margin-bottom:2px;display:flex;align-items:center;gap:6px;}
-.inv-label .status-icon{font-size:12px;}
-.inv-sublabel{font-weight:bold;font-size:17px;margin-bottom:8px;color:var(--text);}
-.inv-content{font-size:16px;line-height:1.7;margin-top:8px;white-space:pre-wrap;}
-.inv-connection{margin-top:10px;padding:12px;background:#FFFDE7;border:2px solid var(--accent);font-size:14px;line-height:1.6;}
-.inv-connection .conn-title{font-weight:bold;color:var(--accent2);margin-bottom:4px;font-size:12px;}
-.code-input-area{margin-top:8px;display:flex;gap:8px;align-items:center;}
-.digit-box{width:48px;height:54px;text-align:center;font-size:18px;font-family:'Press Start 2P',monospace;border:3px solid var(--border);}
-.digit-box:focus{border-color:var(--accent);background:#FFFDE7;}
-.code-submit{padding:11px 18px;font-size:16px;background:var(--accent);font-weight:bold;}
-.code-error{color:var(--red);font-size:12px;margin-top:4px;min-height:18px;}
-.locked-msg{color:var(--gray);font-size:13px;margin-top:4px;}
+/* 족자(scroll) */
+.scroll-report{position:relative;filter:drop-shadow(4px 5px 0 rgba(0,0,0,.22));margin-bottom:6px;}
+.sr-rod{position:relative;height:18px;border:3px solid #222;z-index:3;background:linear-gradient(#FFE9A8 0 5px,#FFD24A 5px 12px,#E0950C 12px 18px);box-shadow:inset 5px 0 0 #FFE9A8, inset -5px 0 0 #C57E00;}
+.sr-rod::before,.sr-rod::after{content:"";position:absolute;top:50%;width:16px;height:30px;border:3px solid #222;transform:translateY(-50%);background:linear-gradient(#8d6e63 0 50%,#5d4037 50% 100%);}
+.sr-rod::before{left:-15px;} .sr-rod::after{right:-15px;}
+.sr-body{border:3px solid #222;border-top:none;border-bottom:none;padding:16px 16px 20px;background-color:#FBF1D6;background-image:radial-gradient(#e8d8a8 1.3px,transparent 1.3px);background-size:11px 11px;box-shadow:inset 0 0 0 2px #E7D3A0;}
+.sr-img{width:100%;height:200px;object-fit:contain;border:3px solid #222;background:#fff;box-shadow:3px 3px 0 rgba(0,0,0,.18);display:block;cursor:zoom-in;}
+.sr-title{font-size:21px;font-weight:bold;line-height:1.3;margin-top:12px;}
+.sr-meta{font-size:13px;color:#6B3F00;margin-top:4px;font-weight:bold;}
+.sr-desc{font-size:15px;line-height:1.7;color:#3a2e1a;margin-top:10px;background:rgba(255,255,255,.62);border:2px solid #E7D3A0;padding:10px 12px;}
+.sr-divider{height:3px;background:repeating-linear-gradient(90deg,#C9B582 0 7px,transparent 7px 12px);margin:16px 0;}
+.inv-list{display:flex;flex-direction:column;}
+.sec{position:relative;background:rgba(255,255,255,.68);border:3px solid #222;border-left-width:7px;box-shadow:3px 3px 0 rgba(0,0,0,.15);padding:12px 13px;margin-bottom:12px;}
+.sec-key{display:inline-block;font-size:12px;font-weight:bold;color:#222;padding:2px 9px;margin-bottom:7px;border:2px solid #222;}
+.sec-seal{position:absolute;top:11px;right:12px;width:30px;height:30px;border:3px solid #C0392B;color:#C0392B;font-weight:bold;text-align:center;line-height:24px;font-size:16px;box-shadow:2px 2px 0 rgba(0,0,0,.18);background:#fff;}
+.sec-sub{font-weight:bold;font-size:16px;margin-bottom:6px;padding-right:38px;}
+.sec-content{font-size:15px;line-height:1.7;color:#2c2418;margin-top:6px;white-space:pre-wrap;}
+.sec-extra{margin-top:10px;padding:10px 12px;border:2px dashed #b9a36a;background:#FFFBEF;font-size:14px;line-height:1.6;color:#4a3c20;}
+.sec-extra .ex-title{font-weight:bold;font-size:12px;margin-bottom:3px;}
+.locked-msg{font-size:13px;color:#8a7a55;margin-bottom:9px;}
+.code-input-area{display:flex;gap:8px;align-items:center;}
+.digit-box{width:48px;height:56px;text-align:center;font-size:18px;line-height:1;font-family:'Press Start 2P',monospace;border:3px solid var(--border);background:#fff;box-shadow:2px 2px 0 rgba(0,0,0,.18);}
+.digit-box:focus{border-color:var(--accent2);background:#FFFDF0;outline:none;}
+.code-submit{padding:10px 15px;font-size:15px;background:var(--accent);font-weight:bold;border:3px solid var(--border);box-shadow:2px 2px 0 rgba(0,0,0,.2);}
+.code-submit:active{transform:translate(2px,2px);box-shadow:none;}
+.code-error{color:var(--red);font-size:12px;font-weight:bold;margin-top:7px;min-height:16px;}
 
 /* TOAST */
 .toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:13px 28px;border:3px solid var(--border);background:var(--accent);color:#222;font-weight:bold;font-size:15px;z-index:1000;animation:toastIn .25s;max-width:90vw;text-align:center;box-shadow:3px 3px 0 rgba(0,0,0,.2);}
@@ -294,13 +300,18 @@ input:focus{border-color:var(--accent);}
     <button class="back-btn btn-gold" onclick="showCategories()">< 타임라인</button>
     <div class="report-era" id="reportEra"></div>
   </div>
-  <div class="report-header">
-    <div class="zoomable"><img class="report-img" id="reportImg" src="" alt="" onclick="openLightbox(this)"><span class="zoom-hint">🔍 탭하면 크게</span></div>
-    <h2 id="reportName"></h2>
-    <div class="meta" id="reportMeta"></div>
-    <div class="desc" id="reportDesc"></div>
+  <div class="scroll-report">
+    <div class="sr-rod"></div>
+    <div class="sr-body">
+      <div class="zoomable"><img class="sr-img" id="reportImg" src="" alt="" onclick="openLightbox(this)"><span class="zoom-hint">🔍 탭하면 크게</span></div>
+      <h2 class="sr-title" id="reportName"></h2>
+      <div class="sr-meta" id="reportMeta"></div>
+      <div class="sr-desc" id="reportDesc"></div>
+      <div class="sr-divider"></div>
+      <div class="inv-list" id="invList"></div>
+    </div>
+    <div class="sr-rod"></div>
   </div>
-  <div class="inv-list" id="invList"></div>
 </div>
 
 <!-- RESULT SCREEN (placeholder — 추후 '획득 뱃지 설명' 기획) -->
@@ -364,6 +375,8 @@ let CATEGORIES = [];   // 시대별 뱃지 (badges type=category)
 let INV_LABELS = [];   // 6개 조사 항목 (sections)
 let LEVELS = [];       // 레벨 단계 (levels)
 let GLOBAL_BADGE = {emoji:"", name:"", desc:""};  // 전체 완주 뱃지 (badges type=global)
+let LABELS = {connectionTitle:"추가 정보", codePrompt:"코드를 입력하세요", codeSubmit:"확인"};  // UI 라벨 (labels 시트)
+const SEC_COLORS = ["#5BB0AE","#FFD23F","#7FBF63","#E88585","#7CACE6","#BBA0E0"];  // 6항목 색(순서: 생산배경·생산방법·생존·가치·보존·접근, PPT 추출)
 
 function applyConfig(cfg){
   LEVELS = (cfg.levels||[]).map(l=>({min:l.min, name:l.name, icon:l.icon||"", iconB:l.icon_b||""}));
@@ -372,6 +385,7 @@ function applyConfig(cfg){
     .map(b=>({key:b.key, badge:(b.emoji?b.emoji+" ":"")+b.name, name:b.name, desc:b.desc, icon:b.icon||""}));
   const g = (cfg.badges||[]).find(b=>b.type==="global");
   if(g) GLOBAL_BADGE = {emoji:g.emoji, name:g.name, desc:g.desc, icon:g.icon||""};
+  if(cfg.labels) LABELS = Object.assign({}, LABELS, cfg.labels);
 }
 
 // === STATE ===
@@ -542,8 +556,8 @@ function buildTutorialSteps(){
     { html: '<div class="tut-title ko">단서 코드를 찾아라</div>'
         + '<div class="tut-body">각 항목은 <b>잠겨 있어요</b>. 출력물(<b>단서 카드</b>)에서 <b>3자리 숫자 코드</b>를 찾아 입력하면 잠금 해제!</div>'
         + '<div class="tut-codemock">'
-          + '<div class="tut-lock">🔒 카드 코드를 입력하세요</div>'
-          + '<div class="tut-digits"><span class="tut-digit">1</span><span class="tut-digit">4</span><span class="tut-digit">7</span><span class="tut-mockbtn">확인</span></div>'
+          + '<div class="tut-lock">'+LABELS.codePrompt+'</div>'
+          + '<div class="tut-digits"><span class="tut-digit">1</span><span class="tut-digit">4</span><span class="tut-digit">7</span><span class="tut-mockbtn">'+LABELS.codeSubmit+'</span></div>'
           + '<div class="tut-arrow">↓</div>'
           + '<div class="tut-done-row">✓ 기록 저장 성공!</div>'
         + '</div>' },
@@ -707,47 +721,44 @@ function renderInvList(d){
   const list = document.getElementById("invList");
   list.innerHTML = "";
 
-  INV_LABELS.forEach(inv=>{
+  INV_LABELS.forEach((inv,idx)=>{
     const item = d.items[inv.key];
     if(!item) return;
-    const completed = isItemCompleted(d.no, inv.key);
+    let completed = isItemCompleted(d.no, inv.key);
     const isWeb = item.method === "웹제공";
+    if(isWeb && !completed){ markItemCompleted(d.no, inv.key); completed = true; } // 웹제공은 열람 시 자동 완료
+    const open = isWeb || completed;
+    const col = SEC_COLORS[idx] || "#6B3F00";
+    const safe = inv.key.replace(/[^a-zA-Z가-힣]/g,"");
 
     const div = document.createElement("div");
-    div.className = "inv-item"+(completed?" completed":"");
+    div.className = "sec";
+    div.style.borderLeftColor = col;
 
-    let html = '<div class="inv-label"><span class="status-icon">'+(completed?"\u2713":(isWeb?"\u25C9":"\u25CB"))+'</span> '+inv.key+'</div>';
-    html += '<div class="inv-sublabel">'+inv.sub+'</div>';
+    let html = (open ? '<span class="sec-seal">完</span>' : '')
+      + '<span class="sec-key" style="background:'+col+'">'+inv.key+'</span>'
+      + '<div class="sec-sub">'+inv.sub+'</div>';
 
-    if(isWeb && !completed){
-      // Auto-complete web items on view
-      markItemCompleted(d.no, inv.key);
-      div.className = "inv-item completed";
-      html = '<div class="inv-label"><span class="status-icon">\u2713</span> '+inv.key+'</div>';
-      html += '<div class="inv-sublabel">'+inv.sub+'</div>';
-    }
-
-    if(isWeb || completed){
-      html += '<div class="inv-content" id="content_'+d.no+'_'+inv.key.replace(/[^a-zA-Z가-힣]/g,"")+'">'+item.content+'</div>';
+    if(open){
+      html += '<div class="sec-content" id="content_'+d.no+'_'+safe+'">'+item.content+'</div>';
       if(!isWeb && item.connection){
-        html += '<div class="inv-connection"><div class="conn-title">📔 Point</div>'+item.connection+'</div>';
+        html += '<div class="sec-extra" style="border-color:'+col+'"><div class="ex-title" style="color:'+col+'">'+LABELS.connectionTitle+'</div>'+item.connection+'</div>';
       }
     } else {
-      html += '<div class="locked-msg">\uD83D\uDD12 카드 코드를 입력하세요</div>';
+      html += '<div class="locked-msg">'+LABELS.codePrompt+'</div>';
       html += '<div class="code-input-area">';
       html += '<input class="digit-box" type="tel" maxlength="1" data-no="'+d.no+'" data-key="'+inv.key+'" data-pos="0" oninput="digitInput(this)" onkeydown="digitKeydown(event,this)">';
       html += '<input class="digit-box" type="tel" maxlength="1" data-no="'+d.no+'" data-key="'+inv.key+'" data-pos="1" oninput="digitInput(this)" onkeydown="digitKeydown(event,this)">';
       html += '<input class="digit-box" type="tel" maxlength="1" data-no="'+d.no+'" data-key="'+inv.key+'" data-pos="2" oninput="digitInput(this)" onkeydown="digitKeydown(event,this)">';
-      html += '<button class="code-submit" onclick="submitCode('+d.no+',\''+inv.key.replace(/'/g,"\\'")+'\')">확인</button>';
+      html += '<button class="code-submit" onclick="submitCode('+d.no+',\''+inv.key.replace(/'/g,"\\'")+'\')">'+LABELS.codeSubmit+'</button>';
       html += '</div>';
-      html += '<div class="code-error" id="err_'+d.no+'_'+inv.key.replace(/[^a-zA-Z가-힣]/g,"")+'"></div>';
+      html += '<div class="code-error" id="err_'+d.no+'_'+safe+'"></div>';
     }
 
     div.innerHTML = html;
     list.appendChild(div);
   });
 
-  // Check if just completed all web items
   checkAutoComplete(d);
 }
 
@@ -860,6 +871,8 @@ function submitCode(no, key){
     if(errEl) errEl.textContent = "코드가 틀렸습니다.";
     targetArea.classList.add("shake");
     setTimeout(()=>targetArea.classList.remove("shake"),400);
+    digits.forEach(b=>{ b.value=""; });   // 틀리면 입력 비우고
+    if(digits[0]) digits[0].focus();       // 첫 칸 포커스
   }
 }
 
