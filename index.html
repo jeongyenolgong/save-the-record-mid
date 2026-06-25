@@ -58,15 +58,22 @@ input:focus{border-color:var(--accent);}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
 /* TOP BAR */
-.top-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:3px solid var(--border);margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-.top-bar .level{font-family:'Press Start 2P',monospace;font-size:13px;color:var(--accent2);}
-.top-bar .count{font-size:16px;}
-.back-btn{font-size:16px;padding:8px 14px;background:var(--light);}
-.top-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.player-name{font-weight:bold;font-size:15px;color:var(--accent2);}
+.top-bar{position:sticky;top:0;z-index:200;background:var(--bg);margin:-20px -18px 16px;padding:14px 18px 12px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--border);flex-wrap:wrap;gap:10px;}
+.top-bar .level{font-size:15px;display:inline-flex;align-items:baseline;gap:6px;}
+.top-bar .level .lv-num{font-family:'Press Start 2P',monospace;font-size:12px;color:#E0950C;}
+.top-bar .level .lv-name{font-weight:bold;color:#6B3F00;}
+.back-btn{font-size:15px;padding:9px 16px;font-weight:bold;background:var(--bg);box-shadow:3px 3px 0 rgba(0,0,0,.22);}
+.back-btn:active{transform:translate(3px,3px);box-shadow:0 0 0 rgba(0,0,0,0);}
+.btn-gold{background:var(--accent);}
+.btn-gold:hover{background:var(--accent2);}
+.top-info{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+.player-name{font-weight:bold;font-size:15px;color:var(--text);}
 
 /* CATEGORIES */
 .greeting{font-size:18px;margin-bottom:18px;padding:14px;border:3px solid var(--accent);background:#FFFDE7;}
+.greet-led{display:flex;align-items:stretch;margin:0 0 18px;min-height:50px;border:3px solid var(--border);background:#222;box-shadow:3px 3px 0 rgba(0,0,0,.25);}
+.greet-led .track{flex:1;overflow:hidden;white-space:nowrap;display:flex;align-items:center;padding:0 14px;}
+.greet-led .run{display:inline-block;animation:marquee 12s linear infinite;font-weight:bold;font-size:19px;color:#FFD24A;text-shadow:0 0 6px rgba(255,210,74,.5);letter-spacing:1px;}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
 @media(max-width:420px){.cat-grid{grid-template-columns:1fr;}}
 .cat-btn{text-align:left;padding:14px;font-size:14px;line-height:1.5;position:relative;}
@@ -102,12 +109,12 @@ input:focus{border-color:var(--accent);}
 .heritage-item .h-meta{font-size:13px;color:#666;margin-top:2px;}
 
 /* REPORT */
-.report-header{padding:12px;border:3px solid var(--accent);background:#FFFDE7;margin-bottom:16px;position:sticky;top:0;z-index:100;}
+.report-header{padding:12px;border:3px solid var(--accent);background:#FFFDE7;margin-bottom:16px;}
 .report-header h2{font-size:20px;margin-bottom:6px;}
 .report-header .meta{font-size:14px;color:#555;}
 .report-header .desc{font-size:14px;color:#444;margin-top:8px;line-height:1.6;}
 .report-header .report-img{width:100%;max-height:240px;object-fit:contain;border:3px solid var(--border);margin-bottom:10px;background:var(--light);}
-.report-progress{font-family:'Press Start 2P',monospace;font-size:11px;text-align:right;margin-bottom:12px;color:var(--accent2);}
+.report-era{font-size:15px;font-weight:bold;color:#6B3F00;}
 .inv-list{display:flex;flex-direction:column;gap:10px;}
 .inv-item{border:3px solid var(--border);padding:14px;}
 .inv-item.completed{border-color:var(--green);}
@@ -250,7 +257,7 @@ input:focus{border-color:var(--accent);}
   </div>
   <div class="scroll-rod bottom"></div>
   </div>
-  <div class="subtitle"><span class="marquee">기록을 저장하라. 기록을 구하라.</span></div>
+  <div class="subtitle"><span class="marquee">기록을 구하라! 기록을 지켜라!</span></div>
   <input type="text" id="nameInput" placeholder="이름 입력" maxlength="5" autocomplete="off">
   <input type="text" id="codeInput" placeholder="수업 코드 입력" maxlength="10" autocomplete="off">
   <div class="error" id="loginError"></div>
@@ -273,30 +280,19 @@ input:focus{border-color:var(--accent);}
     <div class="top-info">
       <div class="player-name" id="playerName"></div>
       <div class="level" id="levelDisplay"></div>
-      <div class="count" id="countDisplay"></div>
     </div>
-    <button class="back-btn" onclick="showResult()">종료</button>
+    <button class="back-btn btn-gold" onclick="showResult()">종료</button>
   </div>
-  <div class="greeting">기록관님, 탐사할 유산을 선택하세요.</div>
+  <div class="greet-led"><div class="track"><span class="run">우리가 기록을 구한다!! 우리가 기록을 지킨다!!</span></div></div>
   <div class="timeline-v" id="timelineList"></div>
   <div class="badge-float" id="badgeFloat"></div>
-</div>
-
-<!-- HERITAGE LIST SCREEN -->
-<div id="heritageList" class="hidden">
-  <div class="top-bar">
-    <button class="back-btn" onclick="showCategories()">< 시대 선택</button>
-    <div class="level" id="levelDisplay2"></div>
-  </div>
-  <h2 id="catTitle" style="font-size:18px;margin-bottom:14px;"></h2>
-  <div class="heritage-list" id="hList"></div>
 </div>
 
 <!-- REPORT SCREEN -->
 <div id="report" class="hidden">
   <div class="top-bar">
-    <button class="back-btn" onclick="showCategories()">< 타임라인</button>
-    <div class="report-progress" id="reportProgress"></div>
+    <button class="back-btn btn-gold" onclick="showCategories()">< 타임라인</button>
+    <div class="report-era" id="reportEra"></div>
   </div>
   <div class="report-header">
     <div class="zoomable"><img class="report-img" id="reportImg" src="" alt="" onclick="openLightbox(this)"><span class="zoom-hint">🔍 탭하면 크게</span></div>
@@ -310,7 +306,11 @@ input:focus{border-color:var(--accent);}
 <!-- RESULT SCREEN (placeholder — 추후 '획득 뱃지 설명' 기획) -->
 <div id="result" class="hidden">
   <div class="top-bar">
-    <div class="level">RESULT</div>
+    <div class="top-info">
+      <div class="player-name" id="resultPlayerName"></div>
+      <div class="level" id="resultLevel"></div>
+    </div>
+    <button class="back-btn" style="visibility:hidden" tabindex="-1" aria-hidden="true">&nbsp;</button>
   </div>
   <div class="greeting" style="text-align:center;">
     <span id="resultName"></span>탐사를 종료했습니다.<br>
@@ -505,7 +505,7 @@ function spawnStars(count){
 
 // === SCREENS ===
 function hideAll(){
-  ["login","tutorial","categories","heritageList","report","result"].forEach(id=>{
+  ["login","tutorial","categories","report","result"].forEach(id=>{
     document.getElementById(id).classList.add("hidden");
   });
 }
@@ -626,6 +626,8 @@ function showResult(){
   hideAll();
   const nm = getPlayerName();
   document.getElementById("resultName").textContent = nm ? nm+" 기록관님, " : "";
+  document.getElementById("resultPlayerName").textContent = getPlayerNameShort();
+  document.getElementById("resultLevel").innerHTML = '<span class="lv-num">Lv.'+getLevel()+'</span><span class="lv-name">'+getLevelName()+'</span>';
   document.getElementById("result").classList.remove("hidden");
 }
 
@@ -633,11 +635,9 @@ function showCategories(){
   hideAll();
   document.getElementById("categories").classList.remove("hidden");
   const lvl = getLevel();
-  const hCount = getCompletedHeritageCount();
   const short = getPlayerNameShort();
   document.getElementById("playerName").textContent = short;
-  document.getElementById("levelDisplay").textContent = "Lv."+lvl+" "+getLevelName();
-  document.getElementById("countDisplay").textContent = "완료: "+hCount+"/"+GAME_DATA.length+"건";
+  document.getElementById("levelDisplay").innerHTML = '<span class="lv-num">Lv.'+lvl+'</span><span class="lv-name">'+getLevelName()+'</span>';
 
   const tl = document.getElementById("timelineList");
   tl.innerHTML = "";
@@ -686,46 +686,24 @@ function showCategories(){
   });
 }
 
-function showHeritage(catKey){
-  hideAll();
-  currentCategory = catKey;
-  document.getElementById("heritageList").classList.remove("hidden");
-  document.getElementById("levelDisplay2").textContent = "Lv."+getLevel()+" "+getLevelName();
-  document.getElementById("catTitle").textContent = catKey;
-
-  const list = document.getElementById("hList");
-  list.innerHTML = "";
-  const items = getCatItems(catKey);
-  items.forEach(d=>{
-    const div = document.createElement("div");
-    div.className = "heritage-item";
-    const done = isHeritageComplete(d.no);
-    const doneCount = getCompletedItems(d.no).length;
-    div.innerHTML = '<div class="info"><div class="h-name">'+d.name+'</div><div class="h-meta">'+d.country+' | '+d.year+'년 | '+doneCount+'/6</div></div><div class="'+(done?"check":"pending")+'">'+(done?"\u2713":"\u25CB")+'</div>';
-    div.onclick = ()=>showReport(d.no);
-    list.appendChild(div);
-  });
-}
-
 function showReport(no){
   hideAll();
   document.getElementById("report").classList.remove("hidden");
   currentHeritage = no;
   const d = GAME_DATA.find(x=>x.no===no);
+  d._celebrated = isHeritageComplete(d.no);
   const noStr = String(d.no).padStart(2,"0");
   document.getElementById("reportImg").src = "images/"+noStr+".jpg";
   document.getElementById("reportImg").alt = d.name;
   document.getElementById("reportName").textContent = d.name;
   document.getElementById("reportMeta").textContent = d.country+" | UNESCO "+d.year+"년 등재";
   document.getElementById("reportDesc").textContent = d.desc || "";
+  document.getElementById("reportEra").textContent = d.category + " · " + d.era_label;
 
   renderInvList(d);
 }
 
 function renderInvList(d){
-  const doneCount = getCompletedItems(d.no).length;
-  document.getElementById("reportProgress").textContent = doneCount+"/6 완료";
-
   const list = document.getElementById("invList");
   list.innerHTML = "";
 
@@ -775,7 +753,6 @@ function renderInvList(d){
 
 function checkAutoComplete(d){
   const doneCount = getCompletedItems(d.no).length;
-  document.getElementById("reportProgress").textContent = doneCount+"/6 완료";
   if(doneCount >= 6 && !d._celebrated){
     d._celebrated = true;
     setTimeout(()=>{
@@ -817,7 +794,7 @@ function closeComplete(){
   document.getElementById("completeOverlay").classList.add("hidden");
   // 타임라인에서 바로 보고서로 진입하면 currentCategory가 비어 있으므로,
   // 빈 카테고리 화면 대신 항상 타임라인(메인)으로 복귀한다.
-  if(currentCategory){ showHeritage(currentCategory); } else { showCategories(); }
+  showCategories();
 }
 
 function digitInput(el){
