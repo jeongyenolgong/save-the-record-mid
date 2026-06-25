@@ -381,12 +381,12 @@ let currentHeritage = null;
 
 function loadState(){
   try{
-    const s = localStorage.getItem("save_the_record_elem_state");
+    const s = localStorage.getItem("save_the_record_mid_state");
     if(s) state = JSON.parse(s);
   }catch(e){}
 }
 function saveState(){
-  localStorage.setItem("save_the_record_elem_state", JSON.stringify(state));
+  localStorage.setItem("save_the_record_mid_state", JSON.stringify(state));
 }
 
 function markItemCompleted(no, key){
