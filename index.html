@@ -741,14 +741,14 @@ function showCategories(){
   list.push({key:"__global__", icon:GLOBAL_BADGE.icon, name:GLOBAL_BADGE.name, desc:GLOBAL_BADGE.desc});
   list.forEach(it=>{
     let earned, ready;
-    if(it.key === "__global__"){ earned = !!state.badge_global; ready = false; }  // 글로벌 퀴즈는 추후 — 현재는 자동 지급
+    if(it.key === "__global__"){ earned = !!state.badge_global; ready = !earned && CATEGORIES.every(c=>!!state["badge_"+c.key]) && quizExists("올컴플리트"); }  // 세 시대 배지 모두 획득 + 글로벌 퀴즈 존재 시 도전 가능
     else { earned = !!state["badge_"+it.key]; ready = !earned && isCatComplete(it.key) && quizExists(it.key); }
     const b = document.createElement("div");
     b.className = "bf-item"+(earned?" earned":ready?" ready":" locked");
     b.title = it.name;
     b.innerHTML = it.icon ? '<img class="bf-img" src="images/badges/'+it.icon+'" alt="'+it.name+'">' : '';
     b.onclick = earned ? ()=>showOverlay(it.name, it.desc, it.icon)
-              : ready  ? ()=>showQuiz(it.key)
+              : ready  ? ()=>showQuiz(it.key==="__global__" ? "올컴플리트" : it.key)
               :          ()=>showOverlay(it.name, lbl("badgeLocked"));
     bl.appendChild(b);
   });
@@ -1055,13 +1055,16 @@ function confirmQuiz(qi){
 }
 
 function quizPass(era){
-  if(state["badge_"+era]) return;
-  state["badge_"+era] = true; saveState();
+  const isGlobal = (era === "올컴플리트");
+  const stKey = isGlobal ? "badge_global" : "badge_"+era;
+  if(state[stKey]) return;
+  state[stKey] = true; saveState();
   showCategories();                               // 타임라인 복귀(배지=획득 컬러)
-  const cat = CATEGORIES.find(c=>c.key===era);
   setTimeout(()=>{
-    if(cat){ showOverlay(cat.name, cat.desc, cat.icon); spawnStars(20); }
-    checkBadge();                                  // 올컴플리트 자동 지급 체크
+    if(isGlobal){ showOverlay(GLOBAL_BADGE.name, GLOBAL_BADGE.desc, GLOBAL_BADGE.icon); }
+    else { const cat = CATEGORIES.find(c=>c.key===era); if(cat) showOverlay(cat.name, cat.desc, cat.icon); }
+    spawnStars(20);
+    checkBadge();                                  // 시대→올컴플리트 활성화 등 후속 체크
   }, 350);
 }
 
