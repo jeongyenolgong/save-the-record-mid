@@ -112,6 +112,15 @@
  "labels": {
   "connectionTitle": "추가 정보",
   "codePrompt": "코드를 입력하세요",
-  "codeSubmit": "확인"
+  "codeSubmit": "확인",
+  "toastSave": "기록 저장 성공!",
+  "completeTitle": "기록 완성!",
+  "completeMeta": "{country} · UNESCO {year}년 등재",
+  "completeSourceFallback": "사진 출처 확인 중",
+  "levelUpNext": "축하합니다! 다음은 '{next}'에 도전하세요!",
+  "levelUpMax": "축하합니다! 최고 등급에 도달했어요!",
+  "badgeLocked": "아직 획득하지 못한 배지예요.",
+  "codeWrong": "코드가 틀렸습니다.",
+  "codeIncomplete": "3자리를 모두 입력하세요."
  }
 }
