@@ -134,6 +134,33 @@ input:focus{border-color:var(--accent);}
 .overlay-box h2,.complete-box h2{font-family:'Galmuri11',monospace;font-weight:bold;font-size:22px;color:var(--accent2);margin:0 0 14px;line-height:1.4;}
 .overlay-box p{font-size:15px;line-height:1.7;margin:0 0 22px;min-height:51px;}  /* 2줄 고정 → 배지·레벨 확인버튼 위치 동일 */
 .overlay-box button,.complete-box button{font-size:14px;padding:10px 26px;background:var(--accent);font-weight:bold;}  /* 확인 버튼 골드 통일 */
+/* 종료 확인 팝업: 기존 .overlay-box 재사용 + 네/아니오 2버튼(동일 폭) */
+.confirm-msg{color:#C0392B;font-weight:bold;}
+.confirm-btns{display:flex;gap:12px;justify-content:center;}
+.confirm-btns button{min-width:130px;}
+.confirm-btns .no{background:#fff;}
+/* ===== RESULT (수호대의 기록) ===== */
+.res-wrap{max-width:430px;margin:0 auto;}
+.res-head{text-align:center;font-size:18px;font-weight:bold;line-height:1.5;color:#3a2e1a;}
+.res-head b{color:#C57E00;}
+.res-sec-t{font-family:'Galmuri11',monospace;font-weight:bold;font-size:15px;color:#6B3F00;text-align:center;margin-bottom:14px;}
+.res-lv1{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.res-lv1 .pic{position:relative;display:inline-block;line-height:0;margin-bottom:8px;}
+.res-lv1 .pic img{width:92px;height:auto;image-rendering:pixelated;display:block;}
+.res-lv1 .pic .b{position:absolute;left:0;top:0;opacity:0;animation:charSwap .8s steps(1,end) infinite;}
+.res-lv1 .lvn{font-family:'Press Start 2P',monospace;font-size:12px;color:#E0950C;}
+.res-lv1 .nm{font-size:18px;font-weight:bold;color:#6B3F00;}
+.rb-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.rb-chip{display:flex;flex-direction:column;align-items:center;gap:4px;width:68px;}
+.rb-chip img{width:48px;height:48px;image-rendering:pixelated;}
+.rb-chip .t{font-size:10px;font-weight:bold;color:#6B3F00;text-align:center;line-height:1.25;}
+.hl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.hl-cell{display:flex;align-items:center;gap:8px;border:2px solid #E7D3A0;background:rgba(255,255,255,.62);padding:6px 8px;}
+.hl-cell img{width:38px;height:38px;object-fit:cover;border:2px solid #222;flex-shrink:0;}
+.hl-cell .nm{font-size:11.5px;font-weight:bold;color:#3a2e1a;line-height:1.3;}
+.res-empty{text-align:center;font-size:13px;color:#999;grid-column:1/-1;}
+.res-actions{display:flex;justify-content:center;}
+.res-save{font-family:'Galmuri11',monospace;font-weight:bold;font-size:15px;padding:11px 44px;background:var(--accent);border:3px solid var(--border);box-shadow:2px 2px 0 rgba(0,0,0,.2);cursor:pointer;}
 /* 팝업 미디어 슬롯(배지·레벨 공통 높이) */
 .overlay-media{height:132px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
 .overlay-img{width:96px;height:auto;image-rendering:pixelated;transform-origin:center;animation:badgeBeat .8s ease-in-out infinite;}  /* 배지: 부드러운 두근두근 */
@@ -304,7 +331,7 @@ input:focus{border-color:var(--accent);}
       <div class="player-name" id="playerName"></div>
       <div class="level" id="levelDisplay"></div>
     </div>
-    <button class="back-btn btn-gold" onclick="showResult()">종료</button>
+    <button class="back-btn btn-gold" onclick="showEndConfirm()">종료</button>
   </div>
   <div class="greet-led"><div class="track"><span class="run">우리가 기록을 구한다!! 우리가 기록을 지킨다!!</span></div></div>
   <div class="timeline-v" id="timelineList"></div>
@@ -345,7 +372,7 @@ input:focus{border-color:var(--accent);}
   </div>
 </div>
 
-<!-- RESULT SCREEN (placeholder — 추후 '획득 뱃지 설명' 기획) -->
+<!-- RESULT SCREEN (수호대의 기록) -->
 <div id="result" class="hidden">
   <div class="top-bar">
     <div class="top-info">
@@ -354,15 +381,40 @@ input:focus{border-color:var(--accent);}
     </div>
     <button class="back-btn" style="visibility:hidden" tabindex="-1" aria-hidden="true">&nbsp;</button>
   </div>
-  <div class="greeting" style="text-align:center;">
-    <span id="resultName"></span>탐사를 종료했습니다.<br>
-    <span style="font-size:13px;color:#777;">※ 결과화면(획득 뱃지 설명)은 준비 중입니다.</span>
-  </div>
-  <div style="text-align:center;margin-top:24px;">
-    <button onclick="logout()">처음으로</button>
+  <div class="res-wrap" id="resultCard">
+    <div class="sr-rod"></div>
+    <div class="sr-body">
+      <div class="res-head" id="resHead"></div>
+      <div class="sr-divider"></div>
+      <div class="res-sec-t" id="resSecLevel"></div>
+      <div class="res-lv1" id="resLevelBox"></div>
+      <div class="sr-divider"></div>
+      <div class="res-sec-t" id="resSecBadges"></div>
+      <div class="rb-row" id="resBadges"></div>
+      <div class="sr-divider"></div>
+      <div class="res-sec-t" id="resSecRecord"></div>
+      <div class="hl-grid" id="resHeritages"></div>
+      <div id="resActions">
+        <div class="sr-divider"></div>
+        <div class="res-actions"><button class="res-save" id="resSaveBtn" onclick="saveResultPDF()"></button></div>
+      </div>
+    </div>
+    <div class="sr-rod"></div>
   </div>
 </div>
 
+</div>
+
+<!-- END CONFIRM (종료 확인) — 기존 통일 모달 재사용 -->
+<div class="overlay hidden" id="endConfirm">
+  <div class="overlay-box">
+    <h2 id="endConfirmTitle"></h2>
+    <p class="confirm-msg" id="endConfirmMsg"></p>
+    <div class="confirm-btns">
+      <button id="endConfirmYesBtn" onclick="endConfirmYes()"></button>
+      <button class="no" id="endConfirmNoBtn" onclick="hideEndConfirm()"></button>
+    </div>
+  </div>
 </div>
 
 <!-- OVERLAY -->
@@ -397,6 +449,10 @@ input:focus{border-color:var(--accent);}
 <!-- STARS CONTAINER -->
 <div class="stars hidden" id="starsContainer"></div>
 
+<!-- PDF 저장용 라이브러리 (로컬 번들) -->
+<script src="lib/html2canvas.min.js"></script>
+<script src="lib/jspdf.umd.min.js"></script>
+
 <script>
 // === GAME DATA ===
 let GAME_DATA = [];  // content.json 에서 로드
@@ -412,7 +468,9 @@ let LABELS = {connectionTitle:"추가 정보", codePrompt:"코드를 입력하�
   completeSourceFallback:"사진 출처 확인 중", levelUpNext:"축하합니다! 다음은 '{next}'에 도전하세요!",
   levelUpMax:"축하합니다! 최고 등급에 도달했어요!", badgeLocked:"아직 획득하지 못한 배지예요.",
   codeWrong:"코드가 틀렸습니다.", codeIncomplete:"3자리를 모두 입력하세요.",
-  quizTitle:"배지 획득 퀴즈", quizGuide:"타임라인에서 해당 기록유산을 다시 확인한 뒤 도전하세요!"};  // UI 문구 (labels 시트) — fallback 기본값
+  quizTitle:"배지 획득 퀴즈", quizGuide:"타임라인에서 해당 기록유산을 다시 확인한 뒤 도전하세요!",
+  endConfirmTitle:"결과를 확인하시겠습니까?", endConfirmMsg:"플레이 기록이 사라집니다.", endConfirmYes:"네", endConfirmNo:"아니오",
+  resultSecLevel:"최종 레벨", resultSecBadges:"최종 획득 배지", resultSecRecord:"수집 완료", resultSave:"저장"};  // UI 문구 (labels 시트) — fallback 기본값
 const SEC_COLORS = ["#5BB0AE","#FFD23F","#7FBF63","#E88585","#7CACE6","#BBA0E0"];  // 6항목 색(순서: 생산배경·생산방법·생존·가치·보존·접근, PPT 추출)
 
 function applyConfig(cfg){
@@ -691,10 +749,72 @@ function logout(){
 function showResult(){
   hideAll();
   const nm = getPlayerName();
-  document.getElementById("resultName").textContent = nm ? nm+" 기록관님, " : "";
   document.getElementById("resultPlayerName").textContent = getPlayerNameShort();
   document.getElementById("resultLevel").innerHTML = '<span class="lv-num">Lv.'+getLevel()+'</span><span class="lv-name">'+getLevelName()+'</span>';
+  // 헤더: "{이름 전체} 수호대의 기록" (이름만 데이터, 문구는 하드코딩)
+  const head = document.getElementById("resHead");
+  head.innerHTML = '<b></b> 수호대의 기록';
+  head.querySelector("b").textContent = nm || "기록";
+  // 섹션 제목 (labels)
+  document.getElementById("resSecLevel").textContent = lbl("resultSecLevel");
+  document.getElementById("resSecBadges").textContent = lbl("resultSecBadges");
+  document.getElementById("resSecRecord").textContent = lbl("resultSecRecord");
+  document.getElementById("resSaveBtn").textContent = lbl("resultSave");
+  // 최종 레벨 캐릭터 (기존 이미지 그대로)
+  const lv = getLevel(), L = LEVELS[lv-1] || {};
+  document.getElementById("resLevelBox").innerHTML =
+    '<div class="pic"><img class="a" src="images/levels/'+(L.icon||"")+'" alt="">'
+    + (L.iconB ? '<img class="b" src="images/levels/'+L.iconB+'" alt="">' : '')
+    + '</div><span class="lvn">Lv.'+lv+'</span><span class="nm">'+(L.name||"")+'</span>';
+  // 획득 배지 (획득한 것만, 기존 이미지/이름)
+  const earned = [];
+  CATEGORIES.forEach(c=>{ if(state["badge_"+c.key]) earned.push(c); });
+  if(state.badge_global) earned.push(GLOBAL_BADGE);
+  document.getElementById("resBadges").innerHTML = earned.length
+    ? earned.map(b=>'<div class="rb-chip"><img src="images/badges/'+(b.icon||"")+'" alt=""><div class="t">'+(b.name||"")+'</div></div>').join("")
+    : '<div class="res-empty">아직 획득한 배지가 없어요.</div>';
+  // 수집 완료 기록유산 (완성된 것만, 시대순)
+  const done = GAME_DATA.filter(d=>isHeritageComplete(d.no)).slice().sort((a,b)=>a.created-b.created);
+  document.getElementById("resHeritages").innerHTML = done.length
+    ? done.map(d=>{ const ns=String(d.no).padStart(2,"0"); return '<div class="hl-cell"><img src="images/'+ns+'.jpg" alt=""><span class="nm">'+d.name+'</span></div>'; }).join("")
+    : '<div class="res-empty">아직 완성한 기록유산이 없어요.</div>';
   document.getElementById("result").classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+
+// 결과 화면 PDF 저장 (족자 카드 그대로 캡처, 저장 버튼은 제외)
+function saveResultPDF(){
+  if(typeof html2canvas==="undefined" || !window.jspdf){ alert("PDF 모듈을 불러오지 못했습니다."); return; }
+  const card = document.getElementById("resultCard");
+  const btn = document.getElementById("resSaveBtn");
+  const prev = btn.textContent; btn.disabled = true; btn.textContent = "저장 중…";
+  html2canvas(card, {scale:2, backgroundColor:"#ffffff", useCORS:true,
+      onclone:(doc)=>{ const a=doc.getElementById("resActions"); if(a) a.style.display="none"; }})
+    .then(canvas=>{
+      const img = canvas.toDataURL("image/jpeg", 0.95);
+      const w = canvas.width, h = canvas.height;
+      const pdf = new window.jspdf.jsPDF({orientation: h>=w?"p":"l", unit:"px", format:[w,h]});
+      pdf.addImage(img, "JPEG", 0, 0, w, h);
+      pdf.save((getPlayerName()||"기록")+"_수호대의기록.pdf");
+    })
+    .catch(e=>{ alert("저장 중 오류가 발생했습니다: "+e); })
+    .finally(()=>{ btn.disabled=false; btn.textContent=prev; });
+}
+
+// 종료 확인 팝업 (기존 통일 모달 재사용)
+function showEndConfirm(){
+  document.getElementById("endConfirmTitle").textContent = lbl("endConfirmTitle");
+  document.getElementById("endConfirmMsg").textContent = lbl("endConfirmMsg");
+  document.getElementById("endConfirmYesBtn").textContent = lbl("endConfirmYes");
+  document.getElementById("endConfirmNoBtn").textContent = lbl("endConfirmNo");
+  document.getElementById("endConfirm").classList.remove("hidden");
+}
+function hideEndConfirm(){ document.getElementById("endConfirm").classList.add("hidden"); }
+function endConfirmYes(){
+  hideEndConfirm();
+  showResult();                                          // 현재 진행상태로 결과 렌더(DOM 채움)
+  state = {completed:{}, loggedIn:false, playerName:""}; // 경고대로 플레이 기록 초기화(다음 플레이어 새 시작)
+  saveState();
 }
 
 function showCategories(){
