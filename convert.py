@@ -94,10 +94,23 @@ def convert_config(xlsx_path, json_path):
             k = str(x.get("key") or "").strip()
             if k:
                 labels[k] = str(x.get("value") or "").strip()
-    config = dict(levels=levels, badges=badges, sections=sections, labels=labels)
+    quizzes = []
+    if "quizzes" in wb.sheetnames:
+        for x in rows(wb["quizzes"]):
+            opts = [str(x.get("opt"+str(i)) or "").strip() for i in range(1, 5)]
+            opts = [o for o in opts if o]
+            quizzes.append(dict(
+                era=str(x.get("era") or "").strip(),
+                order=int(x["order"]) if x.get("order") not in (None, "") else 0,
+                type=str(x.get("type") or "text").strip(),
+                image=str(x.get("image") or "").strip(),
+                question=str(x.get("question") or "").strip(),
+                options=opts,
+                answer=int(x["answer"]) if x.get("answer") not in (None, "") else 1))
+    config = dict(levels=levels, badges=badges, sections=sections, labels=labels, quizzes=quizzes)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(config, f, ensure_ascii=False, indent=1)
-    print(f"{os.path.basename(json_path)} 생성: 레벨 {len(levels)}단계, 뱃지 {len(badges)}종, 항목 {len(sections)}개, 라벨 {len(labels)}개")
+    print(f"{os.path.basename(json_path)} 생성: 레벨 {len(levels)}단계, 뱃지 {len(badges)}종, 항목 {len(sections)}개, 라벨 {len(labels)}개, 퀴즈 {len(quizzes)}문항")
 
 if __name__ == "__main__":
     xlsx = find_xlsx()

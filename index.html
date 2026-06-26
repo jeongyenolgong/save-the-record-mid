@@ -74,39 +74,19 @@ input:focus{border-color:var(--accent);}
 .greet-led{display:flex;align-items:stretch;margin:0 0 18px;min-height:50px;border:3px solid var(--border);background:#222;box-shadow:3px 3px 0 rgba(0,0,0,.25);}
 .greet-led .track{flex:1;overflow:hidden;white-space:nowrap;display:flex;align-items:center;padding:0 14px;}
 .greet-led .run{display:inline-block;animation:marquee 12s linear infinite;font-weight:bold;font-size:19px;color:#FFD24A;text-shadow:0 0 6px rgba(255,210,74,.5);letter-spacing:1px;}
-.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
-@media(max-width:420px){.cat-grid{grid-template-columns:1fr;}}
-.cat-btn{text-align:left;padding:14px;font-size:14px;line-height:1.5;position:relative;}
-.cat-btn .cat-count{font-size:12px;color:#777;margin-top:4px;}
-.cat-btn.completed{border-color:var(--green);background:#E8F5E9;}
-.cat-btn.completed::after{content:'\2605';position:absolute;top:6px;right:8px;color:var(--accent);font-size:16px;}
 
-/* BADGES */
-.badges-section{margin-top:16px;padding:12px;border:3px solid var(--border);}
-.badges-section h3{font-family:'Press Start 2P',monospace;font-size:10px;margin-bottom:10px;}
-.badge-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
-.badge-item{display:flex;flex-direction:column;align-items:center;gap:2px;width:64px;}
-.badge-img{width:52px;height:52px;image-rendering:pixelated;}
-.badge-cap{font-size:9px;color:var(--gray);text-align:center;line-height:1.2;}
-.badge-item.earned .badge-cap{color:var(--text);}
-.badge-item.locked .badge-img{filter:grayscale(1) brightness(1.15) opacity(0.45);}
-/* 좌측 플로팅 배지 스트립 (태블릿: 콘텐츠 좌측 여백 / 폰: 하단 가로) */
+/* BADGES (플로팅 스트립 — 태블릿: 콘텐츠 좌측 여백 / 폰: 하단 가로) */
 .badge-float{position:fixed;top:50%;transform:translateY(-50%);left:max(8px,calc(50% - 330px - 56px));display:flex;flex-direction:column;gap:12px;z-index:500;}
 .bf-item{cursor:pointer;line-height:0;}
 .bf-img{width:48px;height:48px;image-rendering:pixelated;transition:transform .1s;}
 .bf-item:hover .bf-img{transform:scale(1.08);}
 .bf-item.locked .bf-img{filter:grayscale(1) brightness(1.15) opacity(0.5);}
+/* 퀴즈 도전 가능 = 흑백 + 골드 링 깜빡임 */
+.bf-item.ready{position:relative;}
+.bf-item.ready .bf-img{filter:grayscale(1) brightness(1.05);}
+.bf-item.ready::before{content:"";position:absolute;inset:-4px;border:3px solid var(--accent);border-radius:50%;animation:bfPulse 1.1s ease-in-out infinite;pointer-events:none;}
+@keyframes bfPulse{0%,100%{transform:scale(.9);opacity:.5;}50%{transform:scale(1.08);opacity:1;}}
 @media(max-width:767px){.badge-float{top:auto;bottom:8px;left:50%;transform:translateX(-50%);flex-direction:row;gap:10px;}}
-
-/* HERITAGE LIST */
-.heritage-list{display:flex;flex-direction:column;gap:8px;}
-.heritage-item{display:flex;justify-content:space-between;align-items:center;padding:14px;border:3px solid var(--border);font-size:16px;}
-.heritage-item:hover{background:var(--accent);cursor:pointer;}
-.heritage-item .check{color:var(--green);font-size:18px;min-width:24px;text-align:center;}
-.heritage-item .pending{color:var(--gray);font-size:18px;min-width:24px;text-align:center;}
-.heritage-item .info{flex:1;}
-.heritage-item .h-name{font-weight:bold;}
-.heritage-item .h-meta{font-size:13px;color:#666;margin-top:2px;}
 
 /* REPORT */
 .report-era{font-size:15px;font-weight:bold;color:#6B3F00;}
@@ -158,9 +138,6 @@ input:focus{border-color:var(--accent);}
 .overlay-media{height:132px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
 .overlay-img{width:96px;height:auto;image-rendering:pixelated;transform-origin:center;animation:badgeBeat .8s ease-in-out infinite;}  /* 배지: 부드러운 두근두근 */
 @keyframes badgeBeat{0%,100%{transform:scale(1);}50%{transform:scale(1.10);}}
-.overlay-char{position:relative;width:96px;height:122px;}                 /* 레벨: 2프레임 하드스왑 */
-.overlay-char img{position:absolute;left:0;top:0;width:96px;height:auto;image-rendering:pixelated;}
-.overlay-char .b{opacity:0;animation:charSwap .8s steps(1,end) infinite;}
 @keyframes charSwap{0%,50%{opacity:0;}50.01%,100%{opacity:1;}}
 /* 레벨업: 이전→현재 단계 변화 (라벨 박스 없는 텍스트) */
 .level-up{display:flex;align-items:flex-start;justify-content:center;gap:12px;}
@@ -174,6 +151,11 @@ input:focus{border-color:var(--accent);}
 .lu-lvname{font-family:'Galmuri11',monospace;font-weight:bold;font-size:11px;line-height:1.2;white-space:nowrap;}
 .lu-lvname.old{color:#aaa;}
 .lu-lvname.new{color:#6B3F00;}
+/* 레벨업 팝업: 레벨(타이틀) 위, 캐릭터(미디어) 아래로 순서 재배치 */
+.overlay-box.lv #overlayTitle{order:1;}
+.overlay-box.lv #overlayMedia{order:2;}
+.overlay-box.lv #overlayMsg{order:3;}
+.overlay-box.lv button{order:4;}
 
 /* COMPLETE OVERLAY (전용 콘텐츠 — 배지 팝업과 같은 리듬: 타이틀→중앙사진→이름→메타→출처→버튼) */
 .complete-media{display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
@@ -264,6 +246,26 @@ input:focus{border-color:var(--accent);}
 .tut-nav button{font-size:15px;padding:11px 20px;}
 .tut-nav .next{background:var(--accent);font-weight:bold;}
 .tut-nav .prev:disabled{opacity:.3;cursor:default;}
+
+/* QUIZ SCREEN (배지 획득 퀴즈 — 족자 본문 안) */
+.quiz-q{position:relative;background:rgba(255,255,255,.74);border:3px solid #222;border-left-width:7px;box-shadow:3px 3px 0 rgba(0,0,0,.15);padding:12px 13px 13px;margin-bottom:14px;}
+.quiz-q:last-child{margin-bottom:0;}
+.quiz-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;}
+.quiz-num{font-family:'Press Start 2P',monospace;font-size:10px;color:#222;border:2px solid #222;padding:4px 8px;}
+.quiz-confirm{font-family:'Galmuri11',monospace;font-size:13px;padding:7px 18px;background:var(--accent);font-weight:bold;border:3px solid var(--border);box-shadow:2px 2px 0 rgba(0,0,0,.2);}
+.quiz-confirm:active{transform:translate(2px,2px);box-shadow:none;}
+.quiz-text{font-size:15px;font-weight:bold;line-height:1.5;margin-bottom:12px;color:#2c2418;}
+.quiz-photo{position:relative;width:100%;max-width:280px;margin:0 auto 12px;}
+.quiz-photo img{width:100%;height:180px;object-fit:contain;border:3px solid var(--border);background:#fff;cursor:zoom-in;display:block;box-shadow:2px 2px 0 rgba(0,0,0,.18);}
+.quiz-opt{position:relative;display:block;width:100%;text-align:left;border:3px solid var(--border);background:#fff;padding:10px 12px;font-size:14px;margin-bottom:8px;line-height:1.4;box-shadow:2px 2px 0 rgba(0,0,0,.12);}
+.quiz-opt:last-child{margin-bottom:0;}
+.quiz-opt:hover{background:#FFFDE7;}
+.quiz-opt.sel{background:var(--accent);font-weight:bold;}
+/* 정답 확정 = 完 도장 + 한지 */
+.quiz-opt.correct{background-color:#FBF1D6;background-image:radial-gradient(#e6d4a0 1.4px,transparent 1.4px);background-size:9px 9px;border-color:#C57E00;font-weight:bold;box-shadow:inset 0 0 0 2px #E7D3A0,2px 2px 0 rgba(0,0,0,.15);padding-right:44px;}
+.quiz-opt .qseal{position:absolute;top:50%;right:8px;transform:translateY(-50%);width:28px;height:28px;border:3px solid #C0392B;color:#C0392B;font-weight:bold;font-size:16px;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:1px 1px 0 rgba(0,0,0,.2);}
+.quiz-opt:disabled{cursor:default;}
+.quiz-opt:disabled:not(.correct){opacity:.4;box-shadow:none;}
 </style>
 </head>
 <body>
@@ -329,6 +331,20 @@ input:focus{border-color:var(--accent);}
   </div>
 </div>
 
+<!-- QUIZ SCREEN (배지 획득 퀴즈) -->
+<div id="quiz" class="hidden">
+  <div class="top-bar">
+    <button class="back-btn btn-gold" onclick="showCategories()">&lt; 타임라인</button>
+    <div class="report-era" id="quizTitle"></div>
+  </div>
+  <div class="greet-led"><div class="track"><span class="run" id="quizGuide"></span></div></div>
+  <div class="scroll-report">
+    <div class="sr-rod"></div>
+    <div class="sr-body" id="quizBody"></div>
+    <div class="sr-rod"></div>
+  </div>
+</div>
+
 <!-- RESULT SCREEN (placeholder — 추후 '획득 뱃지 설명' 기획) -->
 <div id="result" class="hidden">
   <div class="top-bar">
@@ -390,11 +406,13 @@ let CATEGORIES = [];   // 시대별 뱃지 (badges type=category)
 let INV_LABELS = [];   // 6개 조사 항목 (sections)
 let LEVELS = [];       // 레벨 단계 (levels)
 let GLOBAL_BADGE = {emoji:"", name:"", desc:""};  // 전체 완주 뱃지 (badges type=global)
+let QUIZZES = [];  // 배지 획득 퀴즈 (config.quizzes — 엑셀 quizzes 시트)
 let LABELS = {connectionTitle:"추가 정보", codePrompt:"코드를 입력하세요", codeSubmit:"확인",
   toastSave:"기록 저장 성공!", completeTitle:"기록 완성!", completeMeta:"{country} · UNESCO {year}년 등재",
   completeSourceFallback:"사진 출처 확인 중", levelUpNext:"축하합니다! 다음은 '{next}'에 도전하세요!",
   levelUpMax:"축하합니다! 최고 등급에 도달했어요!", badgeLocked:"아직 획득하지 못한 배지예요.",
-  codeWrong:"코드가 틀렸습니다.", codeIncomplete:"3자리를 모두 입력하세요."};  // UI 문구 (labels 시트) — fallback 기본값
+  codeWrong:"코드가 틀렸습니다.", codeIncomplete:"3자리를 모두 입력하세요.",
+  quizTitle:"배지 획득 퀴즈", quizGuide:"타임라인에서 해당 기록유산을 다시 확인한 뒤 도전하세요!"};  // UI 문구 (labels 시트) — fallback 기본값
 const SEC_COLORS = ["#5BB0AE","#FFD23F","#7FBF63","#E88585","#7CACE6","#BBA0E0"];  // 6항목 색(순서: 생산배경·생산방법·생존·가치·보존·접근, PPT 추출)
 
 function applyConfig(cfg){
@@ -405,6 +423,7 @@ function applyConfig(cfg){
   const g = (cfg.badges||[]).find(b=>b.type==="global");
   if(g) GLOBAL_BADGE = {emoji:g.emoji, name:g.name, desc:g.desc, icon:g.icon||""};
   if(cfg.labels) LABELS = Object.assign({}, LABELS, cfg.labels);
+  QUIZZES = cfg.quizzes || [];
 }
 
 // === STATE ===
@@ -504,6 +523,8 @@ function renderOverlay(){
   const it = overlayQueue[0];
   if(!it) return;
   const media = document.getElementById("overlayMedia");
+  const ovBox = document.querySelector("#overlay .overlay-box");
+  if(ovBox) ovBox.classList.toggle("lv", it.kind === "level");  // 레벨업: 레벨(타이틀) 위, 캐릭터 아래로 순서 재배치
   if(it.kind === "level" && it.icon){     // 레벨업: 이전→현재 단계 변화(이전 캐릭터 흐림 → 현재 캐릭터 2프레임)
     const prevCol = it.prevIcon
       ? '<div class="lu-col"><div class="lu-pic"><div class="lu-prev"><img src="images/levels/'+it.prevIcon+'" alt=""></div></div><div class="lu-lvname old">'+(it.prevName||"")+'</div></div><div class="lu-arrow">→</div>'
@@ -550,7 +571,7 @@ function spawnStars(count){
 
 // === SCREENS ===
 function hideAll(){
-  ["login","tutorial","categories","report","result"].forEach(id=>{
+  ["login","tutorial","categories","report","result","quiz"].forEach(id=>{
     document.getElementById(id).classList.add("hidden");
   });
 }
@@ -716,17 +737,19 @@ function showCategories(){
 
   const bl = document.getElementById("badgeFloat");
   bl.innerHTML = "";
-  const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
-  const list = CATEGORIES.map(cat=>({icon:cat.icon, name:cat.name, desc:cat.desc, earned:isCatComplete(cat.key)}));
-  list.push({icon:GLOBAL_BADGE.icon, name:GLOBAL_BADGE.name, desc:GLOBAL_BADGE.desc, earned:allDone});
+  const list = CATEGORIES.map(cat=>({key:cat.key, icon:cat.icon, name:cat.name, desc:cat.desc}));
+  list.push({key:"__global__", icon:GLOBAL_BADGE.icon, name:GLOBAL_BADGE.name, desc:GLOBAL_BADGE.desc});
   list.forEach(it=>{
+    let earned, ready;
+    if(it.key === "__global__"){ earned = !!state.badge_global; ready = false; }  // 글로벌 퀴즈는 추후 — 현재는 자동 지급
+    else { earned = !!state["badge_"+it.key]; ready = !earned && isCatComplete(it.key) && quizExists(it.key); }
     const b = document.createElement("div");
-    b.className = "bf-item"+(it.earned?" earned":" locked");
+    b.className = "bf-item"+(earned?" earned":ready?" ready":" locked");
     b.title = it.name;
     b.innerHTML = it.icon ? '<img class="bf-img" src="images/badges/'+it.icon+'" alt="'+it.name+'">' : '';
-    b.onclick = ()=> it.earned
-      ? showOverlay(it.name, it.desc, it.icon)
-      : showOverlay(it.name, lbl("badgeLocked"));
+    b.onclick = earned ? ()=>showOverlay(it.name, it.desc, it.icon)
+              : ready  ? ()=>showQuiz(it.key)
+              :          ()=>showOverlay(it.name, lbl("badgeLocked"));
     bl.appendChild(b);
   });
 }
@@ -925,29 +948,121 @@ function checkLevelUp(d){
 }
 
 function checkBadge(d){
+  // 시대 배지: 퀴즈가 있으면 퀴즈 통과(quizPass) 시 지급 — 완성만으로는 지급/팝업 없음(플로팅 배지 링이 '도전 가능' 표시).
+  // 퀴즈 없는 시대만 완성 시 자동 지급.
   CATEGORIES.forEach(cat=>{
-    if(isCatComplete(cat.key)){
-      const bKey = "badge_"+cat.key;
-      if(!state[bKey]){
-        state[bKey] = true;
-        saveState();
-        setTimeout(()=>{
-          showOverlay(cat.name, cat.desc, cat.icon);
-          spawnStars(20);
-        }, 250);
-      }
+    if(isCatComplete(cat.key) && !state["badge_"+cat.key] && !quizExists(cat.key)){
+      state["badge_"+cat.key] = true;
+      saveState();
+      setTimeout(()=>{ showOverlay(cat.name, cat.desc, cat.icon); spawnStars(20); }, 250);
     }
   });
-  // Check global
-  const allDone = CATEGORIES.every(c=>isCatComplete(c.key));
-  if(allDone && !state.badge_global){
+  // 올컴플리트: 세 시대 배지 모두 획득 시. 글로벌 퀴즈가 생기면 그때 게이트(현재는 자동 지급).
+  const allEarned = CATEGORIES.every(c=>!!state["badge_"+c.key]);
+  if(allEarned && !state.badge_global && !quizExists("올컴플리트") && !quizExists("global")){
     state.badge_global = true;
     saveState();
-    setTimeout(()=>{
-      showOverlay(GLOBAL_BADGE.name, GLOBAL_BADGE.desc, GLOBAL_BADGE.icon);
-      spawnStars(20);
-    }, 250);
+    setTimeout(()=>{ showOverlay(GLOBAL_BADGE.name, GLOBAL_BADGE.desc, GLOBAL_BADGE.icon); spawnStars(20); }, 250);
   }
+}
+
+// === QUIZ (배지 획득 퀴즈) ===
+let currentQuizEra = "";
+let quizPicks = [];
+
+function quizExists(era){ return QUIZZES.some(q=>q.era===era); }
+function getEraQuiz(era){ return QUIZZES.filter(q=>q.era===era).slice().sort((a,b)=>a.order-b.order); }
+function getQuizSolved(era){
+  if(!state.quizSolved) state.quizSolved = {};
+  const n = getEraQuiz(era).length;
+  if(!state.quizSolved[era] || state.quizSolved[era].length !== n) state.quizSolved[era] = Array(n).fill(false);
+  return state.quizSolved[era];
+}
+
+function showQuiz(era){
+  if(!quizExists(era)) return;
+  currentQuizEra = era;
+  quizPicks = getEraQuiz(era).map(()=>-1);
+  hideAll();
+  document.getElementById("quiz").classList.remove("hidden");
+  document.getElementById("quizTitle").textContent = lbl("quizTitle");
+  document.getElementById("quizGuide").textContent = lbl("quizGuide");
+  renderQuiz();
+  window.scrollTo(0,0);
+}
+
+function renderQuiz(){
+  const qs = getEraQuiz(currentQuizEra);
+  const body = document.getElementById("quizBody");
+  body.innerHTML = "";
+  qs.forEach((q,qi)=>{
+    const col = SEC_COLORS[qi % SEC_COLORS.length];
+    const div = document.createElement("div");
+    div.className = "quiz-q"; div.id = "qcard"+qi; div.style.borderLeftColor = col;
+    let h = '<div class="quiz-head"><span class="quiz-num" style="background:'+col+'">Q'+(qi+1)+'</span>'
+      + '<button class="quiz-confirm" id="qcf'+qi+'" onclick="confirmQuiz('+qi+')">'+lbl("codeSubmit")+'</button></div>'
+      + '<div class="quiz-text">'+q.question+'</div>';
+    if(q.type === "photo" && q.image){
+      h += '<div class="quiz-photo"><img src="images/'+q.image+'.jpg" alt="" onclick="openLightbox(this)"><span class="zoom-hint">🔍 탭하면 크게</span></div>';
+    }
+    h += (q.options||[]).map((o,oi)=>'<button class="quiz-opt" data-qi="'+qi+'" data-oi="'+oi+'" onclick="pickQuiz('+qi+','+oi+')">'+o+'</button>').join('');
+    div.innerHTML = h;
+    body.appendChild(div);
+  });
+  refreshQuiz();
+}
+
+function refreshQuiz(){
+  const qs = getEraQuiz(currentQuizEra);
+  const solved = getQuizSolved(currentQuizEra);
+  document.querySelectorAll("#quizBody .quiz-opt").forEach(b=>{
+    const qi = +b.dataset.qi, oi = +b.dataset.oi;
+    b.className = "quiz-opt"; b.disabled = false;
+    const old = b.querySelector(".qseal"); if(old) old.remove();
+    if(solved[qi]){
+      b.disabled = true;
+      if(oi === qs[qi].answer-1){ b.classList.add("correct"); const s=document.createElement("span"); s.className="qseal"; s.textContent="完"; b.appendChild(s); }
+      return;
+    }
+    if(quizPicks[qi] === oi) b.classList.add("sel");
+  });
+  qs.forEach((q,qi)=>{ const cf=document.getElementById("qcf"+qi); if(cf) cf.style.display = solved[qi] ? "none" : ""; });
+}
+
+function pickQuiz(qi, oi){
+  if(getQuizSolved(currentQuizEra)[qi]) return;
+  quizPicks[qi] = oi;
+  refreshQuiz();
+}
+
+function quizShake(qi){
+  const c = document.getElementById("qcard"+qi);
+  if(c){ c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake"); setTimeout(()=>c.classList.remove("shake"), 420); }
+}
+
+function confirmQuiz(qi){
+  const qs = getEraQuiz(currentQuizEra);
+  const solved = getQuizSolved(currentQuizEra);
+  if(solved[qi]) return;
+  if(quizPicks[qi] === -1){ quizShake(qi); return; }
+  if(quizPicks[qi] === qs[qi].answer-1){          // 정답 → 완료 잠금 + 반짝이
+    solved[qi] = true; saveState();
+    refreshQuiz(); spawnStars(14);
+    if(solved.every(Boolean)) setTimeout(()=>quizPass(currentQuizEra), 700);
+  } else {                                         // 오답 → 흔들림 + 선택 초기화(정답 비공개)
+    quizPicks[qi] = -1; refreshQuiz(); quizShake(qi);
+  }
+}
+
+function quizPass(era){
+  if(state["badge_"+era]) return;
+  state["badge_"+era] = true; saveState();
+  showCategories();                               // 타임라인 복귀(배지=획득 컬러)
+  const cat = CATEGORIES.find(c=>c.key===era);
+  setTimeout(()=>{
+    if(cat){ showOverlay(cat.name, cat.desc, cat.icon); spawnStars(20); }
+    checkBadge();                                  // 올컴플리트 자동 지급 체크
+  }, 350);
 }
 
 // === INIT ===
