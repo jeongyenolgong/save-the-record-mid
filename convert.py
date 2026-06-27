@@ -107,10 +107,18 @@ def convert_config(xlsx_path, json_path):
                 question=str(x.get("question") or "").strip(),
                 options=opts,
                 answer=int(x["answer"]) if x.get("answer") not in (None, "") else 1))
-    config = dict(levels=levels, badges=badges, sections=sections, labels=labels, quizzes=quizzes)
+    tutorial = []
+    if "tutorial" in wb.sheetnames:
+        for x in rows(wb["tutorial"]):
+            tutorial.append(dict(
+                order=int(x["order"]) if x.get("order") not in (None, "") else 0,
+                title=str(x.get("title") or "").strip(),
+                body=str(x.get("body") or "").strip()))
+        tutorial.sort(key=lambda v: v["order"])
+    config = dict(levels=levels, badges=badges, sections=sections, labels=labels, quizzes=quizzes, tutorial=tutorial)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(config, f, ensure_ascii=False, indent=1)
-    print(f"{os.path.basename(json_path)} 생성: 레벨 {len(levels)}단계, 뱃지 {len(badges)}종, 항목 {len(sections)}개, 라벨 {len(labels)}개, 퀴즈 {len(quizzes)}문항")
+    print(f"{os.path.basename(json_path)} 생성: 레벨 {len(levels)}단계, 뱃지 {len(badges)}종, 항목 {len(sections)}개, 라벨 {len(labels)}개, 퀴즈 {len(quizzes)}문항, 튜토리얼 {len(tutorial)}단계")
 
 if __name__ == "__main__":
     xlsx = find_xlsx()
